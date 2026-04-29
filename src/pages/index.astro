@@ -1,0 +1,50 @@
+---
+import Layout from '../layouts/Layout.astro';
+import AdsterraSlot from '../components/AdsterraSlot.astro';
+import { CALCULATORS, CATEGORY_LABEL, getCalcsByCategory, type CalcCategory } from '../lib/calculators.ts';
+
+const cats: CalcCategory[] = ['loan', 'tax', 'labor', 'life'];
+---
+
+<Layout
+  title="CalcZen — 한국형 계산기 26종 모음 (대출·세금·연봉·퇴직금)"
+  description="LTV·DTI·DSR, 종합소득세, 양도세, 연봉 실수령액, 퇴직금, 실업급여 등 한국 법령 기반 계산기 26종을 무료로. 회원가입 없이 바로 사용."
+  keywords={['계산기', '대출 계산기', '세금 계산기', '연봉 계산기', '퇴직금 계산기']}
+/>
+
+<main class="min-h-screen">
+  <section class="bg-gradient-to-br from-emerald-50 to-white py-12">
+    <div class="container mx-auto max-w-5xl px-4 text-center">
+      <h1 class="text-4xl md:text-5xl font-bold tracking-tight">한국형 계산기, 한곳에</h1>
+      <p class="mt-4 text-lg text-slate-600">대출·세금·노동·일상 26종. 모두 무료. 모두 브라우저에서.</p>
+    </div>
+  </section>
+
+  <div class="container mx-auto max-w-5xl px-4">
+    <AdsterraSlot type="banner" width={728} height={90} />
+  </div>
+
+  {cats.map((cat) => (
+    <section class="container mx-auto max-w-5xl px-4 py-8">
+      <h2 class="mb-4 text-2xl font-semibold">{CATEGORY_LABEL[cat]}</h2>
+      <div class="grid grid-cols-1 gap-3 md:grid-cols-2 lg:grid-cols-3">
+        {getCalcsByCategory(cat).map((calc) => (
+          <a
+            href={`/calc/${calc.slug}`}
+            class="rounded-xl border bg-white p-5 transition hover:border-emerald-400 hover:shadow-md"
+          >
+            <h3 class="font-semibold text-slate-900">{calc.name}</h3>
+            <p class="mt-1 text-sm text-slate-600 line-clamp-2">{calc.description}</p>
+          </a>
+        ))}
+      </div>
+    </section>
+  ))}
+
+  <div class="container mx-auto max-w-5xl px-4">
+    <AdsterraSlot type="banner" width={728} height={90} />
+  </div>
+
+  <AdsterraSlot type="push" />
+  <AdsterraSlot type="social" />
+</main>

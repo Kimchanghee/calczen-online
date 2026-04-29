@@ -1,0 +1,150 @@
+---
+import AdsterraSlot from '../components/AdsterraSlot.astro';
+
+interface Props {
+  title: string;
+  description: string;
+  canonicalPath?: string;
+  keywords?: string[];
+  faqs?: Array<{ question: string; answer: string }>;
+  breadcrumbs?: Array<{ name: string; url: string }>;
+  ldJson?: any;
+}
+
+const { title, description, canonicalPath = '/', keywords = [], faqs = [], breadcrumbs = [], ldJson } = Astro.props;
+const baseUrl = import.meta.env.PUBLIC_SITE_URL || 'https://calczen.online';
+const canonical = `${baseUrl}${canonicalPath}`;
+const popunderKey = import.meta.env.PUBLIC_ADSTERRA_POPUNDER_KEY;
+
+// JSON-LD 구조화 데이터 (SEO + AEO 핵심)
+const baseLdJson = {
+  '@context': 'https://schema.org',
+  '@graph': [
+    {
+      '@type': 'Organization',
+      '@id': `${baseUrl}#org`,
+      name: 'CalcZen',
+      url: baseUrl,
+      logo: `${baseUrl}/logo.png`,
+      description: '한국형 계산기 26종 — 대출·세금·연봉·퇴직금·BMI 무료 계산기',
+    },
+    {
+      '@type': 'WebSite',
+      '@id': `${baseUrl}#site`,
+      name: 'CalcZen',
+      url: baseUrl,
+      publisher: { '@id': `${baseUrl}#org` },
+      inLanguage: 'ko-KR',
+    },
+    ...(faqs.length > 0 ? [{
+      '@type': 'FAQPage',
+      mainEntity: faqs.map(f => ({
+        '@type': 'Question',
+        name: f.question,
+        acceptedAnswer: { '@type': 'Answer', text: f.answer },
+      })),
+    }] : []),
+    ...(breadcrumbs.length > 0 ? [{
+      '@type': 'BreadcrumbList',
+      itemListElement: breadcrumbs.map((b, i) => ({
+        '@type': 'ListItem',
+        position: i + 1,
+        name: b.name,
+        item: b.url,
+      })),
+    }] : []),
+    ...(ldJson ? [ldJson] : []),
+  ],
+};
+---
+
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="generator" content={Astro.generator} />
+    <meta name="theme-color" content="#10b981" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    {keywords.length > 0 && <meta name="keywords" content={keywords.join(', ')} />}
+    <link rel="canonical" href={canonical} />
+
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:type" content="website" />
+    <meta property="og:locale" content="ko_KR" />
+    <meta property="og:site_name" content="CalcZen" />
+    <meta property="og:image" content={`${baseUrl}/og-image.png`} />
+
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={`${baseUrl}/og-image.png`} />
+
+    <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1" />
+
+    <link rel="preconnect" href="https://www.profitableratecpm.com" />
+    <link rel="dns-prefetch" href="//www.profitableratecpm.com" />
+
+    <script type="application/ld+json" set:html={JSON.stringify(baseLdJson)} />
+  </head>
+  <body class="bg-slate-50 text-slate-900 antialiased">
+    <header class="border-b bg-white">
+      <div class="container mx-auto flex max-w-5xl items-center justify-between p-4">
+        <a href="/" class="text-2xl font-bold text-emerald-600">CalcZen</a>
+        <nav class="flex gap-4 text-sm" aria-label="주요 카테고리">
+          <a href="/categories/loan" class="hover:text-emerald-600">금융·대출</a>
+          <a href="/categories/tax" class="hover:text-emerald-600">세금</a>
+          <a href="/categories/labor" class="hover:text-emerald-600">노동·소득</a>
+          <a href="/categories/life" class="hover:text-emerald-600">일상</a>
+        </nav>
+      </div>
+    </header>
+
+    {breadcrumbs.length > 0 && (
+      <nav aria-label="Breadcrumb" class="container mx-auto max-w-5xl px-4 py-3 text-xs text-slate-500">
+        <ol class="flex flex-wrap gap-2">
+          {breadcrumbs.map((b, i) => (
+            <li>
+              {i < breadcrumbs.length - 1 ? <a href={b.url} class="hover:text-emerald-600">{b.name}</a> : <span class="text-slate-900">{b.name}</span>}
+              {i < breadcrumbs.length - 1 && <span class="ml-2">/</span>}
+            </li>
+          ))}
+        </ol>
+      </nav>
+    )}
+
+    <slot />
+
+    {faqs.length > 0 && (
+      <section class="container mx-auto max-w-3xl px-4 py-12">
+        <h2 class="mb-6 text-2xl font-bold">자주 묻는 질문</h2>
+        <div class="space-y-3">
+          {faqs.map(f => (
+            <details class="rounded-xl border bg-white p-5">
+              <summary class="cursor-pointer font-semibold">{f.question}</summary>
+              <div class="mt-3 text-slate-700 leading-relaxed">{f.answer}</div>
+            </details>
+          ))}
+        </div>
+      </section>
+    )}
+
+    <footer class="border-t bg-white py-8">
+      <div class="container mx-auto max-w-5xl px-4 text-center text-sm text-slate-500">
+        <p>© 2026 CalcZen. 한국형 계산기 26종 무료 제공.</p>
+        <p class="mt-1 text-xs">본 계산기는 참고용이며 법적·세무적 효력이 없습니다. 정확한 산정은 국세청 홈택스 또는 전문가 상담 권장.</p>
+        <p class="mt-1 text-xs">
+          <a href="/llms.txt" class="hover:text-emerald-600">llms.txt</a> ·
+          <a href="/sitemap.xml" class="ml-2 hover:text-emerald-600">sitemap.xml</a>
+        </p>
+      </div>
+    </footer>
+
+    {popunderKey && (
+      <script is:inline async type="text/javascript" src={`//pl${popunderKey}.profitableratecpm.com/${popunderKey}/invoke.js`} />
+    )}
+  </body>
+</html>

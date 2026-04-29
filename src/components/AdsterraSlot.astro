@@ -1,0 +1,62 @@
+---
+/**
+ * Adsterra 광고 슬롯 (Astro 버전).
+ * shared/adsterra-integration/AdsterraSlot.astro 의 사이트 로컬 카피.
+ * 변수는 .env로 주입: PUBLIC_ADSTERRA_*_KEY
+ */
+
+interface Props {
+  type: 'banner' | 'social' | 'push' | 'popunder' | 'multitag';
+  width?: number;
+  height?: number;
+  className?: string;
+}
+
+const { type, width = 728, height = 90, className = '' } = Astro.props;
+
+const KEYS = {
+  banner: import.meta.env.PUBLIC_ADSTERRA_BANNER_KEY || '',
+  social: import.meta.env.PUBLIC_ADSTERRA_SOCIAL_KEY || '',
+  push: import.meta.env.PUBLIC_ADSTERRA_PUSH_KEY || '',
+  popunder: import.meta.env.PUBLIC_ADSTERRA_POPUNDER_KEY || '',
+  multitag: import.meta.env.PUBLIC_ADSTERRA_MULTITAG_KEY || '',
+};
+
+const slotId = `adsterra-${type}-${Math.random().toString(36).slice(2, 9)}`;
+---
+
+{type === 'banner' && KEYS.banner && (
+  <div
+    id={slotId}
+    class={`adsterra-slot adsterra-banner ${className}`}
+    style={`min-width:${width}px;min-height:${height}px;display:flex;justify-content:center;margin:1.25rem auto;`}
+  >
+    <script is:inline define:vars={{ key: KEYS.banner, w: width, h: height }}>
+      window.atOptions = window.atOptions || {};
+      window.atOptions[key] = { key, format: 'iframe', height: h, width: w, params: {} };
+    </script>
+    <script is:inline async type="text/javascript" src={`//www.profitableratecpm.com/${KEYS.banner}/invoke.js`} />
+  </div>
+)}
+
+{type === 'social' && KEYS.social && (
+  <script is:inline async type="text/javascript" src={`//pl${KEYS.social}.profitableratecpm.com/${KEYS.social}/invoke.js`} />
+)}
+
+{type === 'push' && KEYS.push && (
+  <script is:inline async type="text/javascript" src={`//pl${KEYS.push}.profitableratecpm.com/${KEYS.push}/invoke.js`} />
+)}
+
+{type === 'popunder' && KEYS.popunder && (
+  <script is:inline async type="text/javascript" src={`//pl${KEYS.popunder}.profitableratecpm.com/${KEYS.popunder}/invoke.js`} />
+)}
+
+{type === 'multitag' && KEYS.multitag && (
+  <div id={slotId} class={`adsterra-slot adsterra-multitag ${className}`} style={`min-width:${width}px;min-height:${height}px;`}>
+    <script is:inline async type="text/javascript" src={`//pl${KEYS.multitag}.profitableratecpm.com/${KEYS.multitag}/invoke.js`} />
+  </div>
+)}
+
+<style>
+  .adsterra-slot:empty { display: none; }
+</style>

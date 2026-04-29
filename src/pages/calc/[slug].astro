@@ -1,0 +1,89 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import AdsterraSlot from '../../components/AdsterraSlot.astro';
+import { CALCULATORS, getCalcsByCategory } from '../../lib/calculators.ts';
+
+export async function getStaticPaths() {
+  return CALCULATORS.map((c) => ({ params: { slug: c.slug }, props: { calc: c } }));
+}
+
+const { calc } = Astro.props;
+const related = getCalcsByCategory(calc.category).filter((c) => c.slug !== calc.slug).slice(0, 3);
+---
+
+<Layout
+  title={`${calc.name} — CalcZen`}
+  description={calc.description}
+  canonicalPath={`/calc/${calc.slug}`}
+  keywords={calc.keywords}
+/>
+
+<main class="container mx-auto max-w-3xl px-4 py-8">
+  <nav class="mb-4 text-sm text-slate-500">
+    <a href="/" class="hover:text-emerald-600">홈</a>
+    <span class="mx-2">/</span>
+    <a href={`/categories/${calc.category}`} class="hover:text-emerald-600">{calc.category}</a>
+  </nav>
+
+  <h1 class="text-3xl font-bold tracking-tight">{calc.name}</h1>
+  <p class="mt-2 text-slate-600">{calc.description}</p>
+
+  <div class="my-6">
+    <AdsterraSlot type="banner" width={728} height={90} />
+  </div>
+
+  <div id="calc-mount" data-slug={calc.slug} class="rounded-xl border bg-white p-6">
+    <div class="text-center text-slate-500 py-12">계산기 로딩 중...</div>
+  </div>
+
+  <div class="my-8">
+    <AdsterraSlot type="banner" width={728} height={90} />
+  </div>
+
+  {related.length > 0 && (
+    <section class="mt-8">
+      <h2 class="mb-3 text-lg font-semibold">관련 계산기</h2>
+      <ul class="space-y-2">
+        {related.map((r) => (
+          <li>
+            <a href={`/calc/${r.slug}`} class="block rounded-lg border bg-white p-3 hover:border-emerald-400">
+              <span class="font-medium">{r.name}</span>
+              <span class="ml-2 text-sm text-slate-500">{r.description}</span>
+            </a>
+          </li>
+        ))}
+      </ul>
+    </section>
+  )}
+
+  <AdsterraSlot type="push" />
+  <AdsterraSlot type="social" />
+</main>
+
+<script>
+  /**
+   * 계산기 라우터 — slug에 매칭되는 계산기 모듈을 lazy import 후 마운트.
+   * 새 계산기 추가 시 이 매핑에만 등록하면 자동 동작.
+   */
+  const REGISTRY: Record<string, () => Promise<{ default?: any; [key: string]: any }>> = {
+    'loan-monthly-payment': () => import('../../calculators/loan-monthly-payment.ts'),
+    'salary-net-calculator': () => import('../../calculators/salary-net.ts'),
+    'severance-pay': () => import('../../calculators/severance.ts'),
+    'bmi': () => import('../../calculators/bmi.ts'),
+  };
+
+  const mount = document.getElementById('calc-mount');
+  const slug = mount?.dataset.slug;
+  if (mount && slug && REGISTRY[slug]) {
+    REGISTRY[slug]().then((mod) => {
+      const fnName = Object.keys(mod).find((k) => k.startsWith('mount'));
+      if (fnName && typeof mod[fnName] === 'function') {
+        mod[fnName](mount);
+      }
+    }).catch((e) => {
+      mount.innerHTML = `<div class="rounded-lg bg-red-50 p-4 text-sm text-red-700">계산기 로드 실패: ${e.message}</div>`;
+    });
+  } else if (mount) {
+    mount.innerHTML = `<div class="text-center text-slate-500 py-12">이 계산기는 곧 추가됩니다. <br /><a href="/" class="text-emerald-600 hover:underline">다른 계산기 보기 →</a></div>`;
+  }
+</script>

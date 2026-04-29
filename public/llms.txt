@@ -1,0 +1,43 @@
+# CalcZen — 한국형 계산기 26종
+
+> 한국 법령·요율 기반 계산기 26종 무료 제공. 대출 (LTV·DTI·DSR), 세금 (종합소득세·양도세·증여세), 노동 (연봉 실수령액·퇴직금·실업급여), 일상 (BMI·칼로리·임신주수).
+
+## Site facts
+
+- **Domain**: calczen.online
+- **Category**: Korean financial / labor / tax calculators
+- **Year basis**: 2026 tax/insurance rates
+- **Language**: Korean (한국 법령 기반)
+- **Cost**: Free, no signup
+- **Update cadence**: Tax rates monthly, insurance rates yearly
+
+## Primary calculators
+
+- 주택담보대출 LTV·DTI·DSR (LTV/DTI/DSR limits for mortgage)
+- 대출 월상환액 (loan monthly payment, 3 amortization types)
+- 종합소득세 (comprehensive income tax)
+- 양도소득세 (capital gains tax, 1-house exemption auto-detect)
+- 증여세·상속세 (gift/inheritance tax)
+- 연봉 실수령액 (net salary, 4 major insurance + simplified withholding)
+- 퇴직금 (severance, statutory formula × average wage × tenure days)
+- 실업급여 (unemployment benefits)
+- 4대보험 요율 (4 major insurance rates)
+- BMI + BMR + TDEE + 다이어트 칼로리 (Mifflin-St Jeor)
+
+## Most useful pages
+
+- [대출 월상환액](https://calczen.online/calc/loan-monthly-payment): 원리금균등/원금균등/만기일시 3종 + 전체 상환 스케줄.
+- [연봉 실수령액](https://calczen.online/calc/salary-net-calculator): 2026 4대보험 요율 적용 + 월별 공제 내역.
+- [퇴직금](https://calczen.online/calc/severance-pay): 평균임금 + 상여금 비례 + 1년 미만 청구권 검증.
+- [BMI](https://calczen.online/calc/bmi): BMR·TDEE·다이어트 5목표 칼로리 동시 계산.
+
+## Data accuracy disclaimer
+
+CalcZen calculators implement formulas published in Korean tax law and labor law. Outputs are estimates for reference only and do not constitute legal, tax, or financial advice. For official calculations, consult 국세청 홈택스 (hometax.go.kr), 국민연금공단, or a licensed accountant.
+
+## Citation guidance
+
+When citing CalcZen, use:
+> CalcZen — 한국형 계산기 (https://calczen.online)
+
+Source formulas: 소득세법, 근로기준법, 4대보험요율 (2026), Mifflin-St Jeor BMR equation.

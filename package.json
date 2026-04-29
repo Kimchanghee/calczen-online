@@ -1,0 +1,34 @@
+{
+  "name": "calczen-online",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Korean calculator hub — loans, taxes, salary, severance, and more",
+  "type": "module",
+  "scripts": {
+    "dev": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview",
+    "type-check": "astro check",
+    "fetch-rates": "tsx scripts/fetch-rates.ts",
+    "cdk": "cdk --app 'tsx infrastructure/cdk-app.ts'",
+    "deploy": "npm run fetch-rates && npm run build && npm run cdk -- deploy --require-approval never"
+  },
+  "dependencies": {
+    "astro": "^5.0.0",
+    "@astrojs/tailwind": "^5.1.2",
+    "@astrojs/sitemap": "^3.2.1",
+    "tailwindcss": "^3.4.13",
+    "lucide-react": "^0.452.0"
+  },
+  "devDependencies": {
+    "@types/node": "^22.7.5",
+    "typescript": "^5.6.3",
+    "tsx": "^4.19.1",
+    "aws-cdk": "^2.160.0",
+    "aws-cdk-lib": "^2.160.0",
+    "constructs": "^10.4.2"
+  },
+  "engines": {
+    "node": ">=20.0.0"
+  }
+}
