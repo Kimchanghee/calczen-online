@@ -1,0 +1,4 @@
+Contact: mailto:security@calczen.online
+Expires: 2027-05-07T23:59:59.000Z
+Preferred-Languages: en, ko
+Canonical: https://calczen.online/.well-known/security.txt
