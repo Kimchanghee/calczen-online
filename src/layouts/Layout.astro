@@ -65,6 +65,14 @@ const baseLdJson = {
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="generator" content={Astro.generator} />
+    <!-- Google Analytics 4 -->
+    <script is:inline async src="https://www.googletagmanager.com/gtag/js?id=G-G0YE8ZCN66"></script>
+    <script is:inline>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-G0YE8ZCN66', { page_path: window.location.pathname });
+    </script>
     <meta name="theme-color" content="#10b981" />
     <title>{title}</title>
     <meta name="description" content={description} />
