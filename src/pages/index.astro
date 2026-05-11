@@ -1,9 +1,16 @@
 ---
 import Layout from '../layouts/Layout.astro';
 import AdsterraSlot from '../components/AdsterraSlot.astro';
+import AffiliateBanner from '../components/AffiliateBanner.astro';
 import { CALCULATORS, CATEGORY_LABEL, getCalcsByCategory, type CalcCategory } from '../lib/calculators.ts';
 
 const cats: CalcCategory[] = ['loan', 'tax', 'labor', 'life'];
+
+const amazonPicks = [
+  { asin: '1612680194', title: 'Rich Dad Poor Dad', subtitle: 'Robert Kiyosaki · 부의 마인드셋', emoji: '💰' },
+  { asin: '1494279673', title: 'The Total Money Makeover', subtitle: 'Dave Ramsey · 가계 부채 정리', emoji: '📊' },
+  { searchQuery: 'financial calculator hp', title: 'Financial Calculator HP', subtitle: '금융 전문 공학용 계산기', emoji: '🧮' }
+];
 ---
 
 <Layout
@@ -43,6 +50,15 @@ const cats: CalcCategory[] = ['loan', 'tax', 'labor', 'life'];
 
   <div class="container mx-auto max-w-5xl px-4">
     <AdsterraSlot type="banner" width={728} height={90} />
+  </div>
+
+  <div class="container mx-auto max-w-5xl px-4">
+    <AffiliateBanner
+      amazonPicks={amazonPicks}
+      coupangKeyword="재테크 베스트셀러 가계부"
+      amazonKeyword="financial calculator"
+      aliexpressCategory="office-calculator"
+    />
   </div>
 
   <AdsterraSlot type="push" />

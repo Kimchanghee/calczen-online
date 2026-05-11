@@ -1,0 +1,96 @@
+---
+interface AmazonPick {
+  asin?: string;
+  title: string;
+  subtitle: string;
+  emoji: string;
+  searchQuery?: string;
+}
+
+interface Props {
+  amazonPicks?: AmazonPick[];
+  coupangKeyword?: string;
+  amazonKeyword?: string;
+  aliexpressCategory?: string;
+}
+
+const AMAZON_TAG = 'amazonfi00681-20';
+const {
+  amazonPicks = [],
+  coupangKeyword = '재테크 계산기 책',
+  amazonKeyword = 'financial calculator',
+  aliexpressCategory = 'office-calculator'
+} = Astro.props;
+
+const coupangUrl = `https://www.coupang.com/np/search?component=&q=${encodeURIComponent(coupangKeyword)}`;
+const aliUrl = `https://www.aliexpress.com/w/wholesale-${aliexpressCategory}.html`;
+const buildProductUrl = (asin: string) => `https://www.amazon.com/dp/${asin}/?tag=${AMAZON_TAG}&linkCode=ll1&language=en_US`;
+const buildSearchUrl = (q: string) => `https://www.amazon.com/s?k=${encodeURIComponent(q)}&tag=${AMAZON_TAG}&linkCode=ll2&language=en_US`;
+---
+
+<section class="affiliate-banner my-8 rounded-2xl border border-slate-200 bg-slate-50 p-5">
+  <div class="mb-4">
+    <p class="text-xs uppercase tracking-widest text-slate-500">Sponsored · 제휴 추천</p>
+    <h2 class="text-lg font-bold text-slate-900 mt-1">오늘의 추천 상품</h2>
+    <p class="text-xs text-slate-600 mt-1">계산기 사용자들이 함께 많이 보는 추천 상품을 큐레이션했습니다.</p>
+  </div>
+
+  <div class="mb-3 rounded-xl border border-amber-300 bg-amber-50 p-4">
+    <div class="mb-3 flex items-center justify-between">
+      <div class="flex items-center gap-2">
+        <span class="text-xs font-bold text-amber-700">amazon associates</span>
+        <span class="text-[10px] text-slate-500">· Featured picks</span>
+      </div>
+      <a href={buildSearchUrl(amazonKeyword)} target="_blank" rel="noopener noreferrer nofollow sponsored" class="text-xs font-semibold text-amber-700 hover:underline">전체 보기 →</a>
+    </div>
+
+    <div class="grid gap-3" style="grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));">
+      {amazonPicks.length > 0 ? amazonPicks.map((p) => (
+        <a
+          href={p.asin ? buildProductUrl(p.asin) : buildSearchUrl(p.searchQuery || p.title)}
+          target="_blank"
+          rel="noopener noreferrer nofollow sponsored"
+          class="block rounded-lg border border-slate-200 bg-white p-3 hover:border-amber-400 hover:shadow-sm transition"
+        >
+          <div class="aspect-square rounded-md bg-slate-50 flex items-center justify-center mb-2">
+            <span class="text-4xl">{p.emoji}</span>
+          </div>
+          <div class="text-xs font-semibold text-slate-900 line-clamp-2 mb-1">{p.title}</div>
+          <div class="text-[11px] text-slate-500 mb-2">{p.subtitle}</div>
+          <div class="bg-amber-500 text-slate-900 text-[11px] font-bold text-center py-1.5 rounded">Shop on Amazon</div>
+        </a>
+      )) : (
+        <a
+          href={buildSearchUrl(amazonKeyword)}
+          target="_blank"
+          rel="noopener noreferrer nofollow sponsored"
+          class="block rounded-lg border border-slate-200 bg-white p-4 hover:border-amber-400 transition text-center"
+        >
+          <div class="text-sm font-bold text-slate-900">Browse on Amazon</div>
+          <div class="text-xs text-slate-500 mt-1">{amazonKeyword}</div>
+        </a>
+      )}
+    </div>
+  </div>
+
+  <div class="grid grid-cols-2 gap-2">
+    <a href={coupangUrl} target="_blank" rel="noopener noreferrer nofollow sponsored" class="block rounded-lg border border-slate-200 bg-white p-3 hover:border-red-400 transition">
+      <div class="flex items-center justify-between mb-1">
+        <span class="text-sm font-bold text-slate-900">쿠팡 파트너스</span>
+        <span class="text-[10px] bg-red-500 text-white px-2 py-0.5 rounded-full">KR</span>
+      </div>
+      <p class="text-xs text-slate-600 m-0">국내 배송 즉시 구매층</p>
+    </a>
+    <a href={aliUrl} target="_blank" rel="noopener noreferrer nofollow sponsored" class="block rounded-lg border border-slate-200 bg-white p-3 hover:border-orange-400 transition">
+      <div class="flex items-center justify-between mb-1">
+        <span class="text-sm font-bold text-slate-900">알리익스프레스</span>
+        <span class="text-[10px] bg-orange-500 text-white px-2 py-0.5 rounded-full">가성비</span>
+      </div>
+      <p class="text-xs text-slate-600 m-0">글로벌 가성비 가전</p>
+    </a>
+  </div>
+
+  <p class="text-[10px] text-slate-400 mt-3 text-center">
+    Amazon Associates 회원으로서 추천 링크 클릭 구매에 대해 수수료를 받습니다. 제휴 링크는 가격에 영향을 주지 않습니다.
+  </p>
+</section>
