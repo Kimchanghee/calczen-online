@@ -23,9 +23,10 @@ const KEYS = {
 };
 
 const slotId = `adsterra-${type}-${Math.random().toString(36).slice(2, 9)}`;
+const displayAdsEnabled = import.meta.env.PUBLIC_ENABLE_DISPLAY_ADS === 'true';
 ---
 
-{type === 'banner' && KEYS.banner && (
+{displayAdsEnabled && type === 'banner' && KEYS.banner && (
   <div
     id={slotId}
     class={`adsterra-slot adsterra-banner ${className}`}
@@ -39,19 +40,19 @@ const slotId = `adsterra-${type}-${Math.random().toString(36).slice(2, 9)}`;
   </div>
 )}
 
-{type === 'social' && KEYS.social && (
+{displayAdsEnabled && type === 'social' && KEYS.social && (
   <script is:inline async type="text/javascript" src={`//pl${KEYS.social}.profitableratecpm.com/${KEYS.social}/invoke.js`} />
 )}
 
-{type === 'push' && KEYS.push && (
+{displayAdsEnabled && type === 'push' && KEYS.push && (
   <script is:inline async type="text/javascript" src={`//pl${KEYS.push}.profitableratecpm.com/${KEYS.push}/invoke.js`} />
 )}
 
-{type === 'popunder' && KEYS.popunder && (
+{displayAdsEnabled && type === 'popunder' && KEYS.popunder && (
   <script is:inline async type="text/javascript" src={`//pl${KEYS.popunder}.profitableratecpm.com/${KEYS.popunder}/invoke.js`} />
 )}
 
-{type === 'multitag' && KEYS.multitag && (
+{displayAdsEnabled && type === 'multitag' && KEYS.multitag && (
   <div id={slotId} class={`adsterra-slot adsterra-multitag ${className}`} style={`min-width:${width}px;min-height:${height}px;`}>
     <script is:inline async type="text/javascript" src={`//pl${KEYS.multitag}.profitableratecpm.com/${KEYS.multitag}/invoke.js`} />
   </div>

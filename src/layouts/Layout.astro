@@ -16,6 +16,7 @@ const { title, description, canonicalPath = '/', keywords = [], faqs = [], bread
 const baseUrl = import.meta.env.PUBLIC_SITE_URL || 'https://calczen.online';
 const canonical = `${baseUrl}${canonicalPath}`;
 const popunderKey = import.meta.env.PUBLIC_ADSTERRA_POPUNDER_KEY;
+const displayAdsEnabled = import.meta.env.PUBLIC_ENABLE_DISPLAY_ADS === 'true';
 
 // JSON-LD 구조화 데이터 (SEO + AEO 핵심)
 const baseLdJson = {
@@ -97,9 +98,6 @@ const baseLdJson = {
 
     <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1" />
 
-    <link rel="preconnect" href="https://www.profitableratecpm.com" />
-    <link rel="dns-prefetch" href="//www.profitableratecpm.com" />
-
     <script type="application/ld+json" set:html={JSON.stringify(baseLdJson)} />
   </head>
   <body class="bg-slate-50 text-slate-900 antialiased">
@@ -155,7 +153,7 @@ const baseLdJson = {
       </div>
     </footer>
 
-    {popunderKey && (
+    {displayAdsEnabled && popunderKey && (
       <script is:inline async type="text/javascript" src={`//pl${popunderKey}.profitableratecpm.com/${popunderKey}/invoke.js`} />
     )}
   </body>
