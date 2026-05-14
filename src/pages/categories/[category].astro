@@ -1,0 +1,69 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import AdsterraSlot from '../../components/AdsterraSlot.astro';
+import AffiliateBanner from '../../components/AffiliateBanner.astro';
+import { CATEGORY_LABEL, getCalcsByCategory, type CalcCategory } from '../../lib/calculators.ts';
+
+const categories = Object.keys(CATEGORY_LABEL) as CalcCategory[];
+
+export function getStaticPaths() {
+  return categories.map((category) => ({ params: { category } }));
+}
+
+const category = Astro.params.category as CalcCategory;
+const label = CATEGORY_LABEL[category];
+const calculators = getCalcsByCategory(category);
+
+const amazonPicks = [
+  { searchQuery: `${label} calculator`, title: `${label} 계산 보조 도구`, subtitle: '계산·재무 관리에 도움이 되는 추천 도구', emoji: '🧮' },
+  { searchQuery: 'personal finance planner', title: 'Personal Finance Planner', subtitle: '예산·현금흐름 정리용 플래너', emoji: '📘' },
+  { searchQuery: 'financial calculator', title: 'Financial Calculator', subtitle: '금융 계산용 공학 계산기', emoji: '📊' },
+];
+---
+
+<Layout
+  title={`${label} 계산기 모음 — CalcZen`}
+  description={`${label} 분야의 한국형 계산기를 한곳에서 확인하세요. 회원가입 없이 무료로 바로 계산할 수 있습니다.`}
+  canonicalPath={`/categories/${category}`}
+  keywords={[`${label} 계산기`, '한국형 계산기', '무료 계산기']}
+  breadcrumbs={[
+    { name: '홈', url: 'https://calczen.online/' },
+    { name: label, url: `https://calczen.online/categories/${category}` },
+  ]}
+/>
+
+<main class="container mx-auto max-w-5xl px-4 py-8">
+  <section class="mb-8">
+    <h1 class="text-3xl font-bold tracking-tight">{label} 계산기</h1>
+    <p class="mt-2 text-slate-600">
+      자주 쓰는 {label} 계산기를 빠르게 열 수 있도록 모았습니다. 각 계산기는 브라우저에서 바로 실행됩니다.
+    </p>
+  </section>
+
+  <AdsterraSlot type="banner" width={728} height={90} />
+
+  <section class="my-8 grid grid-cols-1 gap-3 md:grid-cols-2 lg:grid-cols-3">
+    {calculators.map((calc) => (
+      <a
+        href={`/calc/${calc.slug}`}
+        class="rounded-xl border bg-white p-5 transition hover:border-emerald-400 hover:shadow-md"
+      >
+        <h2 class="font-semibold text-slate-900">{calc.name}</h2>
+        <p class="mt-2 text-sm text-slate-600">{calc.description}</p>
+        <span class="mt-4 inline-block text-sm font-medium text-emerald-600">계산하기</span>
+      </a>
+    ))}
+  </section>
+
+  <AdsterraSlot type="banner" width={728} height={90} />
+
+  <AffiliateBanner
+    amazonPicks={amazonPicks}
+    coupangKeyword={`${label} 계산기 재테크`}
+    amazonKeyword={`${label} calculator`}
+    aliexpressCategory="office-calculator"
+  />
+
+  <AdsterraSlot type="push" />
+  <AdsterraSlot type="social" />
+</main>
