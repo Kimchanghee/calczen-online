@@ -4,9 +4,8 @@ import AdsterraSlot from '../../components/AdsterraSlot.astro';
 import AffiliateBanner from '../../components/AffiliateBanner.astro';
 import { CATEGORY_LABEL, getCalcsByCategory, type CalcCategory } from '../../lib/calculators.ts';
 
-const categories = Object.keys(CATEGORY_LABEL) as CalcCategory[];
-
 export function getStaticPaths() {
+  const categories = Object.keys(CATEGORY_LABEL) as CalcCategory[];
   return categories.map((category) => ({ params: { category } }));
 }
 
