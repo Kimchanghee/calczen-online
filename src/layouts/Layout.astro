@@ -1,5 +1,4 @@
 ---
-import AdsterraSlot from '../components/AdsterraSlot.astro';
 import '../styles/global.css';
 
 interface Props {
@@ -15,9 +14,6 @@ interface Props {
 const { title, description, canonicalPath = '/', keywords = [], faqs = [], breadcrumbs = [], ldJson } = Astro.props;
 const baseUrl = import.meta.env.PUBLIC_SITE_URL || 'https://calczen.online';
 const canonical = `${baseUrl}${canonicalPath}`;
-const popunderKey = import.meta.env.PUBLIC_ADSTERRA_POPUNDER_KEY;
-const displayAdsEnabled = import.meta.env.PUBLIC_ENABLE_DISPLAY_ADS === 'true';
-
 // JSON-LD 구조화 데이터 (SEO + AEO 핵심)
 const baseLdJson = {
   '@context': 'https://schema.org',
@@ -152,9 +148,5 @@ const baseLdJson = {
         </p>
       </div>
     </footer>
-
-    {displayAdsEnabled && popunderKey && (
-      <script is:inline async type="text/javascript" src={`//pl${popunderKey}.profitableratecpm.com/${popunderKey}/invoke.js`} />
-    )}
   </body>
 </html>
