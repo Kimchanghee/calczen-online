@@ -1,6 +1,5 @@
 ---
 import Layout from '../layouts/Layout.astro';
-import AdsterraSlot from '../components/AdsterraSlot.astro';
 import AffiliateBanner from '../components/AffiliateBanner.astro';
 import { CALCULATORS, CATEGORY_LABEL, getCalcsByCategory, type CalcCategory } from '../lib/calculators.ts';
 
@@ -27,10 +26,6 @@ const amazonPicks = [
     </div>
   </section>
 
-  <div class="container mx-auto max-w-5xl px-4">
-    <AdsterraSlot type="banner" width={728} height={90} />
-  </div>
-
   {cats.map((cat) => (
     <section class="container mx-auto max-w-5xl px-4 py-8">
       <h2 class="mb-4 text-2xl font-semibold">{CATEGORY_LABEL[cat]}</h2>
@@ -49,10 +44,6 @@ const amazonPicks = [
   ))}
 
   <div class="container mx-auto max-w-5xl px-4">
-    <AdsterraSlot type="banner" width={728} height={90} />
-  </div>
-
-  <div class="container mx-auto max-w-5xl px-4">
     <AffiliateBanner
       amazonPicks={amazonPicks}
       coupangKeyword="재테크 베스트셀러 가계부"
@@ -60,7 +51,4 @@ const amazonPicks = [
       aliexpressCategory="office-calculator"
     />
   </div>
-
-  <AdsterraSlot type="push" />
-  <AdsterraSlot type="social" />
 </main>

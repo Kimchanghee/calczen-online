@@ -1,6 +1,5 @@
 ---
 import Layout from '../../layouts/Layout.astro';
-import AdsterraSlot from '../../components/AdsterraSlot.astro';
 import { CALCULATORS, getCalcsByCategory } from '../../lib/calculators.ts';
 
 export async function getStaticPaths() {
@@ -9,6 +8,35 @@ export async function getStaticPaths() {
 
 const { calc } = Astro.props;
 const related = getCalcsByCategory(calc.category).filter((c) => c.slug !== calc.slug).slice(0, 3);
+
+const categoryGuide: Record<string, { title: string; body: string; fields: string[]; cautions: string[] }> = {
+  loan: {
+    title: '입력 전에 확인할 대출 기준',
+    body: '대출 계산은 원금, 기간, 금리, 상환 방식이 조금만 달라져도 월 부담과 총이자가 크게 달라집니다. 광고나 상품 링크보다 먼저 실제 숫자를 넣어 감당 가능한 범위를 확인하도록 구성했습니다.',
+    fields: ['대출 원금 또는 목표 금액', '연 이자율과 상환 기간', '원리금균등, 원금균등, 만기일시 등 상환 방식'],
+    cautions: ['중도상환수수료와 보증료는 금융사마다 다릅니다.', 'DSR·DTI 한도는 소득과 기존 대출에 따라 달라집니다.', '최종 한도는 금융사 심사 기준을 확인해야 합니다.']
+  },
+  tax: {
+    title: '세금 계산 전에 준비할 항목',
+    body: '세금 페이지는 과세표준, 공제, 보유 기간, 가족 관계 같은 조건을 먼저 정리한 뒤 예상 세액을 읽어야 합니다. 단순 공식만 보여주는 대신 어떤 값을 모아야 하는지 바로 확인할 수 있게 보강했습니다.',
+    fields: ['과세 대상 금액 또는 공급가액', '적용 가능한 공제와 감면', '신고 연도와 보유 기간'],
+    cautions: ['세율과 공제 한도는 매년 바뀔 수 있습니다.', '비과세 요건은 예외가 많아 실제 신고 전에 재확인이 필요합니다.', '지방세와 부가 부과금은 별도일 수 있습니다.']
+  },
+  labor: {
+    title: '급여·노동 계산 기준',
+    body: '실수령액과 수당은 계약 형태, 근무 시간, 4대보험 적용 여부에 따라 달라집니다. 계산 결과는 협의나 신고 전 빠른 기준점으로 쓰도록 안내를 강화했습니다.',
+    fields: ['월급 또는 평균임금', '근무 일수와 근속 기간', '보험료와 소득세 적용 조건'],
+    cautions: ['회사 규정과 근로계약서 조건을 함께 확인하세요.', '비과세 수당은 항목별 적용 여부가 다릅니다.', '퇴직금과 연차수당은 평균임금 산정 기간이 중요합니다.']
+  },
+  life: {
+    title: '생활 계산기 사용 기준',
+    body: '생활 계산기는 빠른 판단을 돕는 도구입니다. 개인 건강, 임신, 일정 관련 판단은 공식 기관이나 전문가의 기준과 함께 확인하는 방식으로 안내합니다.',
+    fields: ['현재 측정값 또는 기준일', '목표 값과 기간', '개인 상황에 맞는 보정 조건'],
+    cautions: ['건강 관련 결과는 의료 판단을 대신하지 않습니다.', '날짜 계산은 시간대와 기준일을 확인하세요.', '결과는 기록용 기준값으로 활용하세요.']
+  }
+};
+
+const guide = categoryGuide[calc.category] ?? categoryGuide.life;
 ---
 
 <Layout
@@ -28,17 +56,42 @@ const related = getCalcsByCategory(calc.category).filter((c) => c.slug !== calc.
   <h1 class="text-3xl font-bold tracking-tight">{calc.name}</h1>
   <p class="mt-2 text-slate-600">{calc.description}</p>
 
-  <div class="my-6">
-    <AdsterraSlot type="banner" width={728} height={90} />
-  </div>
-
   <div id="calc-mount" data-slug={calc.slug} class="rounded-xl border bg-white p-6">
     <div class="text-center text-slate-500 py-12">계산기 로딩 중...</div>
   </div>
 
-  <div class="my-8">
-    <AdsterraSlot type="banner" width={728} height={90} />
-  </div>
+  <section class="mt-8 rounded-xl border bg-white p-6">
+    <h2 class="text-xl font-semibold">{guide.title}</h2>
+    <p class="mt-3 leading-7 text-slate-700">{guide.body}</p>
+    <div class="mt-5 grid gap-4 md:grid-cols-2">
+      <div>
+        <h3 class="font-semibold text-slate-900">필수 입력값</h3>
+        <ul class="mt-3 space-y-2 text-sm leading-6 text-slate-600">
+          {guide.fields.map((field) => <li>- {field}</li>)}
+        </ul>
+      </div>
+      <form class="rounded-lg bg-emerald-50 p-4" onsubmit="return false">
+        <h3 class="font-semibold text-emerald-900">빠른 체크 입력칸</h3>
+        <label class="mt-3 block text-sm text-emerald-950">
+          기준 금액
+          <input name="amount" inputmode="decimal" placeholder="예: 10000000" class="mt-1 w-full rounded border border-emerald-200 bg-white px-3 py-2 text-sm" />
+        </label>
+        <label class="mt-3 block text-sm text-emerald-950">
+          기간 또는 비율
+          <input name="rate" inputmode="decimal" placeholder="예: 12개월 또는 4.5%" class="mt-1 w-full rounded border border-emerald-200 bg-white px-3 py-2 text-sm" />
+        </label>
+        <button type="submit" class="mt-4 rounded bg-emerald-600 px-4 py-2 text-sm font-semibold text-white">
+          입력값 정리하기
+        </button>
+      </form>
+    </div>
+    <div class="mt-5 rounded-lg bg-slate-50 p-4">
+      <h3 class="font-semibold text-slate-900">결과 해석 주의사항</h3>
+      <ul class="mt-3 space-y-2 text-sm leading-6 text-slate-600">
+        {guide.cautions.map((caution) => <li>- {caution}</li>)}
+      </ul>
+    </div>
+  </section>
 
   {related.length > 0 && (
     <section class="mt-8">
@@ -55,9 +108,6 @@ const related = getCalcsByCategory(calc.category).filter((c) => c.slug !== calc.
       </ul>
     </section>
   )}
-
-  <AdsterraSlot type="push" />
-  <AdsterraSlot type="social" />
 </main>
 
 <script>

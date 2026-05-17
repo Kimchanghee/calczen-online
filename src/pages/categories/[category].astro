@@ -1,6 +1,5 @@
 ---
 import Layout from '../../layouts/Layout.astro';
-import AdsterraSlot from '../../components/AdsterraSlot.astro';
 import AffiliateBanner from '../../components/AffiliateBanner.astro';
 import { CATEGORY_LABEL, getCalcsByCategory, type CalcCategory } from '../../lib/calculators.ts';
 
@@ -39,8 +38,6 @@ const amazonPicks = [
     </p>
   </section>
 
-  <AdsterraSlot type="banner" width={728} height={90} />
-
   <section class="my-8 grid grid-cols-1 gap-3 md:grid-cols-2 lg:grid-cols-3">
     {calculators.map((calc) => (
       <a
@@ -54,15 +51,10 @@ const amazonPicks = [
     ))}
   </section>
 
-  <AdsterraSlot type="banner" width={728} height={90} />
-
   <AffiliateBanner
     amazonPicks={amazonPicks}
     coupangKeyword={`${label} 계산기 재테크`}
     amazonKeyword={`${label} calculator`}
     aliexpressCategory="office-calculator"
   />
-
-  <AdsterraSlot type="push" />
-  <AdsterraSlot type="social" />
 </main>
