@@ -41,7 +41,7 @@ const buildSearchUrl = (q: string) => `https://www.amazon.com/s?k=${encodeURICom
         <span class="text-xs font-bold text-amber-700">amazon associates</span>
         <span class="text-[10px] text-slate-500">· Featured picks</span>
       </div>
-      <a href={buildSearchUrl(amazonKeyword)} target="_blank" rel="noopener noreferrer nofollow sponsored" class="text-xs font-semibold text-amber-700 hover:underline">전체 보기 →</a>
+      <a href={buildSearchUrl(amazonKeyword)} target="_blank" rel="noopener noreferrer nofollow sponsored" class="text-xs font-semibold text-amber-700 hover:underline" data-affiliate-link>전체 보기 →</a>
     </div>
 
     <div class="grid gap-3" style="grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));">
@@ -51,7 +51,7 @@ const buildSearchUrl = (q: string) => `https://www.amazon.com/s?k=${encodeURICom
           target="_blank"
           rel="noopener noreferrer nofollow sponsored"
           class="block rounded-lg border border-slate-200 bg-white p-3 hover:border-amber-400 hover:shadow-sm transition"
-        >
+         data-affiliate-link>
           <div class="aspect-square rounded-md bg-slate-50 flex items-center justify-center mb-2">
             <span class="text-4xl">{p.emoji}</span>
           </div>
@@ -65,7 +65,7 @@ const buildSearchUrl = (q: string) => `https://www.amazon.com/s?k=${encodeURICom
           target="_blank"
           rel="noopener noreferrer nofollow sponsored"
           class="block rounded-lg border border-slate-200 bg-white p-4 hover:border-amber-400 transition text-center"
-        >
+         data-affiliate-link>
           <div class="text-sm font-bold text-slate-900">Browse on Amazon</div>
           <div class="text-xs text-slate-500 mt-1">{amazonKeyword}</div>
         </a>
@@ -74,14 +74,14 @@ const buildSearchUrl = (q: string) => `https://www.amazon.com/s?k=${encodeURICom
   </div>
 
   <div class="grid grid-cols-2 gap-2">
-    <a href={coupangUrl} target="_blank" rel="noopener noreferrer nofollow sponsored" class="block rounded-lg border border-slate-200 bg-white p-3 hover:border-red-400 transition">
+    <a href={coupangUrl} target="_blank" rel="noopener noreferrer nofollow sponsored" class="block rounded-lg border border-slate-200 bg-white p-3 hover:border-red-400 transition" data-affiliate-link>
       <div class="flex items-center justify-between mb-1">
         <span class="text-sm font-bold text-slate-900">쿠팡 파트너스</span>
         <span class="text-[10px] bg-red-500 text-white px-2 py-0.5 rounded-full">KR</span>
       </div>
       <p class="text-xs text-slate-600 m-0">국내 배송 즉시 구매층</p>
     </a>
-    <a href={aliUrl} target="_blank" rel="noopener noreferrer nofollow sponsored" class="block rounded-lg border border-slate-200 bg-white p-3 hover:border-orange-400 transition">
+    <a href={aliUrl} target="_blank" rel="noopener noreferrer nofollow sponsored" class="block rounded-lg border border-slate-200 bg-white p-3 hover:border-orange-400 transition" data-affiliate-link>
       <div class="flex items-center justify-between mb-1">
         <span class="text-sm font-bold text-slate-900">알리익스프레스</span>
         <span class="text-[10px] bg-orange-500 text-white px-2 py-0.5 rounded-full">가성비</span>
