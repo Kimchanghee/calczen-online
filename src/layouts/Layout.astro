@@ -14,6 +14,8 @@ interface Props {
 const { title, description, canonicalPath = '/', keywords = [], faqs = [], breadcrumbs = [], ldJson } = Astro.props;
 const baseUrl = import.meta.env.PUBLIC_SITE_URL || 'https://calczen.online';
 const canonical = `${baseUrl}${canonicalPath}`;
+const safeAdKey = import.meta.env.PUBLIC_ADSTERRA_BANNER_KEY || import.meta.env.PUBLIC_ADSTERRA_POPUNDER_KEY || '';
+const safeAdSrcDoc = safeAdKey ? `<!doctype html><html><head><meta charset="utf-8" /><style>html,body{margin:0;padding:0;overflow:hidden;background:transparent}body{display:grid;place-items:center;min-height:250px}</style></head><body><script type="text/javascript">atOptions={'key':'${safeAdKey}','format':'iframe','height':250,'width':300,'params':{}};<\/script><script type="text/javascript" src="https://www.highperformanceformat.com/${safeAdKey}/invoke.js"><\/script></body></html>` : '';
 // JSON-LD 구조화 데이터 (SEO + AEO 핵심)
 const baseLdJson = {
   '@context': 'https://schema.org',
@@ -146,6 +148,18 @@ const baseLdJson = {
             </details>
           ))}
         </div>
+      </section>
+    )}
+
+
+    {safeAdSrcDoc && (
+      <section class="container mx-auto max-w-5xl px-4 py-6">
+        <aside class="safe-inline-adsterra rounded-xl border bg-white p-4" aria-label="Advertisement">
+          <p class="mb-2 text-[11px] font-semibold uppercase text-slate-500">Advertisement</p>
+          <div class="grid place-items-center overflow-hidden">
+            <iframe title="calczen-safe-inline-adsterra" width="300" height="250" loading="eager" srcdoc={safeAdSrcDoc} class="border-0"></iframe>
+          </div>
+        </aside>
       </section>
     )}
 
