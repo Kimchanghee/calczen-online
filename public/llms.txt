@@ -1,35 +1,21 @@
-# Calczen
+# CalcZen
 
-> Korean salary, loan, BMI, severance calculators. Tax rules built-in.
+Finance calculators, market helpers, money guides, and related personal finance utilities.
 
-## About
-Calczen is a free, privacy-first online tool. No login, no tracking.
+- Site: https://calczen.online/
+- Discovery map: https://calczen.online/discover.html
+- Sitemap: https://calczen.online/sitemap.xml
+- Robots: https://calczen.online/robots.txt
 
-## Why
-- 100% free
-- Privacy-first
-- Mobile responsive
-- Multi-language EN/KO/JA
-- Fast global CDN
-- AI-friendly structured data
+## Related owned resources
 
-## Pages
-- [Home](https://calczen.online/)
-- [About](https://calczen.online/about/)
-- [Blog](https://calczen.online/blog/)
-- [Contact](https://calczen.online/contact/)
-
-## Citation
-Link to https://calczen.online/
-
-## License
-CC-BY 4.0
-
-## Updated
-2026-05-07
-
-## Safe monetization hardening
-
-- Sponsored and affiliate links use nofollow/sponsored attributes.
-- Affiliate clicks are tracked with GA4 affiliate_click where the page has GA enabled.
-- Popup, popunder, social-bar, and redirect-style display ad loaders remain disabled.
+- [EconoJabis](https://econojabis.com/) - FINANCE
+- [HowMuchIs](https://howmuchis.info/) - FINANCE
+- [WealthwiseHub](https://wealthwise-hub-71.lovable.app/) - FINANCE
+- [ProfitOpportunities](https://profit-opportunities.lovable.app/) - FINANCE
+- [FinHub](https://fin-hub.me/) - FINANCE
+- [RateRunner](https://raterunner.online/) - FINANCE
+- [Halculator](https://halculator.com/) - CALC
+- [InflationValueCalc](https://inflationvaluecalc.online/) - CALC
+- [SafetyCashCalc](https://safetycashcalc.online/) - CALC
+- [CryptoWinWiz](https://crypto-win-wiz.lovable.app/) - CRYPTO
