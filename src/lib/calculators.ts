@@ -1,7 +1,7 @@
 /**
- * 한국형 계산기 50종 메타 + 핵심 산식.
+ * 한국형 계산기 27종 메타 + 핵심 산식.
  * 각 계산기는 클라이언트 사이드 100% 작동.
- * 세법·요율은 매년 갱신 필요 → scripts/fetch-rates.ts 에서 ECOS·공단 페이지 폴링.
+ * 세법·요율과 적용 제외 조건은 공개 전 정기 검토가 필요합니다.
  */
 
 export type CalcCategory = 'loan' | 'tax' | 'labor' | 'life';
@@ -19,46 +19,46 @@ export interface CalcMeta {
 export const CALCULATORS: CalcMeta[] = [
   // 금융 (loan)
   { id: 'mortgage-ltv', category: 'loan', slug: 'mortgage-ltv-dti-dsr',
-    name: '주택담보대출 LTV·DTI·DSR 계산기',
-    description: '주택 가격, 소득, 기존 대출로 가능 한도 산정. 규제·비규제 지역 별도.',
-    keywords: ['LTV 계산기', 'DTI 계산기', 'DSR 계산기', '주담대 한도'] },
+    name: '주택담보대출 LTV·DSR 한도 계산기',
+    description: '입력한 LTV·DSR 비율, 소득, 기존 원리금으로 대출 한도를 간이 추정. DTI 별도 계산 제외.',
+    keywords: ['LTV 계산기', 'DSR 계산기', '주담대 한도'] },
   { id: 'loan-monthly', category: 'loan', slug: 'loan-monthly-payment',
     name: '대출 월상환액 계산기',
     description: '원리금균등·원금균등·만기일시 상환 방식별 월상환액과 총이자.',
     keywords: ['대출 계산기', '원리금균등', '월상환액'] },
   { id: 'savings-vs-deposit', category: 'loan', slug: 'savings-vs-deposit',
     name: '적금 vs 예금 수익 비교',
-    description: '동일 원금·기간일 때 적금과 예금 만기 수령액 차이.',
+    description: '동일 원금·기간·금리 가정에서 예금과 적금의 세후 이자 비교.',
     keywords: ['적금 계산기', '예금 계산기', '복리'] },
   { id: 'compound-interest', category: 'loan', slug: 'compound-interest',
     name: '복리 계산기',
-    description: '월·분기·연 복리 적용 시 미래 가치.',
-    keywords: ['복리 계산기', '단리'] },
+    description: '초기 원금과 월 납입액에 월복리를 적용한 미래 가치 추정.',
+    keywords: ['복리 계산기', '월복리'] },
   { id: 'auto-loan', category: 'loan', slug: 'auto-loan',
     name: '자동차 할부 계산기',
     description: '신차·중고차 할부 월 부담액 + 총이자.',
     keywords: ['자동차 할부', '오토론'] },
   { id: 'student-loan', category: 'loan', slug: 'student-loan',
     name: '학자금 대출 상환 계산기',
-    description: '한국장학재단 일반·취업후상환 시뮬레이션.',
-    keywords: ['학자금 대출', '취업후상환'] },
+    description: '잔액·금리·월 상환액 기준 일반 상환 기간과 총이자 간이 추정.',
+    keywords: ['학자금 대출', '대출 상환 기간'] },
 
   // 세금 (tax)
   { id: 'income-tax', category: 'tax', slug: 'comprehensive-income-tax',
     name: '종합소득세 계산기',
-    description: '근로·사업·이자·배당 소득 합산 종합소득세 산출.',
+    description: '입력한 종합소득금액·소득공제·세액공제로 누진세액 간이 추정.',
     keywords: ['종합소득세 계산기', '5월 종합소득세'] },
   { id: 'capital-gains', category: 'tax', slug: 'capital-gains-tax',
     name: '양도소득세 계산기',
-    description: '주택·토지·주식 양도 시 양도세. 1주택 비과세 자동 판정.',
-    keywords: ['양도세 계산기', '1주택 비과세'] },
+    description: '양도가액·취득가액·필요경비·공제액 기준 양도세 간이 추정. 비과세 자동 판정 제외.',
+    keywords: ['양도세 계산기', '양도차익'] },
   { id: 'gift-tax', category: 'tax', slug: 'gift-tax',
     name: '증여세 계산기',
-    description: '증여재산·관계별 공제·할증 적용.',
+    description: '증여재산가액과 직접 입력한 공제액 기준 증여세 간이 추정. 할증 제외.',
     keywords: ['증여세 계산기', '증여재산공제'] },
   { id: 'inheritance-tax', category: 'tax', slug: 'inheritance-tax',
     name: '상속세 계산기',
-    description: '상속재산·일괄공제·기초공제 적용 후 세액 추정.',
+    description: '상속재산·채무와 직접 입력한 공제액 기준 상속세 간이 추정.',
     keywords: ['상속세 계산기'] },
   { id: 'vat', category: 'tax', slug: 'vat',
     name: '부가가치세 계산기',
@@ -66,15 +66,15 @@ export const CALCULATORS: CalcMeta[] = [
     keywords: ['부가세 계산기', '공급가액'] },
   { id: 'withholding', category: 'tax', slug: 'withholding-tax',
     name: '원천징수 계산기',
-    description: '근로·사업·기타소득 원천징수 세율.',
+    description: '선택한 예시 세율로 원천징수액과 실지급액을 간이 계산.',
     keywords: ['원천징수 계산기', '3.3%'] },
   { id: 'property-tax', category: 'tax', slug: 'comprehensive-property-tax',
     name: '종합부동산세 계산기',
-    description: '공시가격·세대 합산 종부세.',
+    description: '공시가격·공제액·공정시장가액비율 기준 종부세 간이 추정. 세대 판정 제외.',
     keywords: ['종부세 계산기'] },
   { id: 'acquisition-tax', category: 'tax', slug: 'acquisition-tax',
     name: '취득세 계산기',
-    description: '주택·토지·자동차 취득세 + 지방교육세.',
+    description: '취득가액과 직접 입력한 합산 세율로 취득 관련 세액 계산.',
     keywords: ['취득세 계산기', '주택 취득세'] },
 
   // 노동 (labor)
@@ -84,7 +84,7 @@ export const CALCULATORS: CalcMeta[] = [
     keywords: ['연봉 실수령액', '월급 계산기', '연봉 계산'] },
   { id: 'severance', category: 'labor', slug: 'severance-pay',
     name: '퇴직금 계산기',
-    description: '평균임금 × 30 × 근속연수 / 365.',
+    description: '1일 평균임금 × 30 × 근속일수 / 365 기준 퇴직금 추정.',
     keywords: ['퇴직금 계산기'] },
   { id: 'unemployment', category: 'labor', slug: 'unemployment-benefits',
     name: '실업급여 계산기',
@@ -100,11 +100,11 @@ export const CALCULATORS: CalcMeta[] = [
     keywords: ['야근수당 계산기', '연장근로수당'] },
   { id: 'four-insurance', category: 'labor', slug: 'four-major-insurance',
     name: '4대보험 계산기',
-    description: '국민연금·건강보험·장기요양·고용·산재 본인·회사 부담분.',
+    description: '국민연금·건강보험·장기요양·고용보험의 근로자 부담분 간이 추정.',
     keywords: ['4대보험 계산기'] },
   { id: 'hourly-wage', category: 'labor', slug: 'hourly-wage-converter',
     name: '시급 ↔ 월급 ↔ 연봉 변환기',
-    description: '근무시간·주휴수당 포함 환산.',
+    description: '시급과 주 소정근로시간으로 월급·연봉 환산. 주 40시간은 월 209시간 적용.',
     keywords: ['시급 계산기', '주휴수당'] },
 
   // 일상 (life)
@@ -122,7 +122,7 @@ export const CALCULATORS: CalcMeta[] = [
     keywords: ['임신 주수', '출산 예정일'] },
   { id: 'dday', category: 'life', slug: 'dday',
     name: '디데이 계산기',
-    description: '두 날짜 사이 일수·주수.',
+    description: '오늘과 목표일 사이의 디데이·일수·주수 계산.',
     keywords: ['디데이 계산기'] },
   { id: 'age', category: 'life', slug: 'age',
     name: '만 나이·연 나이 계산기',
@@ -130,7 +130,7 @@ export const CALCULATORS: CalcMeta[] = [
     keywords: ['만나이 계산기'] },
   { id: 'unit', category: 'life', slug: 'unit-converter',
     name: '단위 변환기',
-    description: '길이·무게·온도·면적·부피 종합.',
+    description: 'km→mile, kg→lb, ㎡→평, ℃→℉, L→미국 갤런 변환.',
     keywords: ['단위 변환기'] },
 ];
 

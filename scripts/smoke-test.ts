@@ -1,4 +1,5 @@
 import assert from 'node:assert/strict';
+import { readFileSync } from 'node:fs';
 import { CALCULATORS, calcBMI, calcLoanMonthly, calcSeverance, calcVAT } from '../src/lib/calculators';
 import { calculateGeneral, getGeneralCalculatorSlugs, getGeneralDefaults } from '../src/calculators/general';
 
@@ -17,6 +18,28 @@ assert.deepEqual(calcBMI(68, 170), { bmi: 23.5, category: '과체중' });
 const vat = calcVAT(110_000, 0.1, 'extract');
 assert.equal(Math.round(vat.net), 100_000);
 assert.equal(Math.round(vat.vat), 10_000);
+
+const catalogCopy = CALCULATORS.map((calculator) => `${calculator.name} ${calculator.description}`).join('\n');
+for (const unsupportedClaim of [
+  '규제·비규제 지역 별도',
+  '월·분기·연 복리',
+  '취업후상환 시뮬레이션',
+  '1주택 비과세 자동 판정',
+  '관계별 공제·할증 적용',
+  '세대 합산 종부세',
+  '산재 본인·회사 부담분',
+  '길이·무게·온도·면적·부피 종합',
+]) {
+  assert.ok(!catalogCopy.includes(unsupportedClaim), `Unsupported catalog claim remains: ${unsupportedClaim}`);
+}
+assert.equal(
+  CALCULATORS.find((calculator) => calculator.slug === 'severance-pay')?.description,
+  '1일 평균임금 × 30 × 근속일수 / 365 기준 퇴직금 추정.',
+);
+
+const affiliateCopy = readFileSync(new URL('../src/components/AffiliateBanner.astro', import.meta.url), 'utf8');
+assert.doesNotMatch(affiliateCopy, /많이 보는|Associates 회원|amazon associates/i);
+assert.match(affiliateCopy, /적격 구매 시 운영자가 수수료를 받을 수 있습니다/);
 
 const dedicated = new Set(['loan-monthly-payment', 'salary-net-calculator', 'severance-pay', 'bmi']);
 const generalSlugs = getGeneralCalculatorSlugs();
