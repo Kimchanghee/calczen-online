@@ -5,7 +5,7 @@ import '../styles/routes.css';
 const categories = Object.keys(CATEGORY_LABEL) as CalcCategory[];
 const selected = CALCULATORS[1];
 ---
-<Layout title="CalcZen · 일상의 계산 노선도" description="금융·세금·노동·일상 계산 도구를 한 정거장씩. 민간 참고용 계산기이며 실제 적용 조건은 별도로 확인하세요." routeMap>
+<Layout title="CalcZen · 일상의 계산 노선도" description="금융·세금·노동·일상 계산 도구를 한 정거장씩. 민간 참고용 계산기이며 실제 적용 조건은 별도로 확인하세요." routeMap indexable>
 <main class="route-shell" id="main">
 <section class="route-hero"><div><p class="eyebrow">SEOUL INSPIRED / 일상의 계산 노선도</p><h1>뭘 계산해볼까요?</h1><p class="hero-sub">복잡한 숫자에서, 가벼운 답으로. {CALCULATORS.length}개의 작은 도구.</p></div><span class="poster-mark" aria-hidden="true">숫자에도<br/>지름길이<br/>있다 ↗</span></section>
 <div class="search-wrap">

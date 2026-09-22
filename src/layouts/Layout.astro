@@ -4,6 +4,7 @@ import { CALCULATORS, CATEGORY_LABEL } from '../lib/calculators';
 
 interface Props {
   routeMap?: boolean;
+  indexable?: boolean;
   title: string;
   description: string;
   canonicalPath?: string;
@@ -13,7 +14,7 @@ interface Props {
   ldJson?: any;
 }
 
-const { routeMap = false, title, description, canonicalPath = '/', keywords = [], faqs = [], breadcrumbs = [], ldJson } = Astro.props;
+const { routeMap = false, indexable = false, title, description, canonicalPath = '/', keywords = [], faqs = [], breadcrumbs = [], ldJson } = Astro.props;
 const baseUrl = 'https://calczen.online';
 const normalizedPath = canonicalPath === '/' ? '/' : `/${canonicalPath.replace(/^\/+|\/+$/g, '')}`;
 const canonical = `${baseUrl}${normalizedPath}`;
@@ -89,7 +90,12 @@ const baseLdJson = {
     <meta name="twitter:description" content={description} />
     <meta name="twitter:image" content={`${baseUrl}/og-image.svg`} />
 
-    <meta name="robots" content="noindex, nofollow, noarchive" />
+    <meta
+      name="robots"
+      content={indexable
+        ? 'index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1'
+        : 'noindex, nofollow, noarchive'}
+    />
 
     <script type="application/ld+json" set:html={JSON.stringify(baseLdJson)} />
     <script is:inline>

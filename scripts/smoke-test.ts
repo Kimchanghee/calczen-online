@@ -66,30 +66,63 @@ console.log(`Arithmetic smoke tests passed: ${CALCULATORS.length} calculators co
 // Build-output checks are opt-in because the required pre-build smoke run may see old dist.
 assert.equal(CALCULATORS.length, 27);
 assert.equal(new Set(CALCULATORS.map(c => c.slug)).size, 27);
+const layoutSource = readFileSync(new URL('../src/layouts/Layout.astro', import.meta.url), 'utf8');
 const homeSource = readFileSync(new URL('../src/pages/index.astro', import.meta.url), 'utf8');
+const aboutSource = readFileSync(new URL('../src/pages/about.astro', import.meta.url), 'utf8');
+const methodologySource = readFileSync(new URL('../src/pages/methodology.astro', import.meta.url), 'utf8');
+assert.match(layoutSource, /indexable = false/);
+assert.match(layoutSource, /'noindex, nofollow, noarchive'/);
 assert.match(homeSource, /CALCULATORS\.filter/);
 assert.match(homeSource, /class="station-link" href=\{'\/calc\/' \+ calc.slug\}/);
+assert.match(homeSource, /routeMap indexable/);
+assert.match(aboutSource, /canonicalPath="\/about" indexable/);
+assert.match(methodologySource, /canonicalPath="\/methodology" indexable/);
 assert.doesNotMatch(homeSource, /calcLoanMonthly|Math\.pow/);
 if (process.argv.includes('--dist')) {
+  const indexDirective = /name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1"/;
+  const noindexDirective = /name="robots" content="noindex, nofollow, noarchive"/;
   const home = readFileSync(new URL('../dist/index.html', import.meta.url), 'utf8');
   assert.equal((home.match(/class="station-link"/g) ?? []).length, 27);
+  assert.match(home, indexDirective);
   for (const c of CALCULATORS) {
     assert.ok(home.includes(`href="/calc/${c.slug}"`), `Missing station: ${c.slug}`);
     const html = readFileSync(new URL(`../dist/calc/${c.slug}/index.html`, import.meta.url), 'utf8');
     assert.ok(html.includes(`data-slug="${c.slug}"`));
-    assert.match(html, /name="robots" content="noindex, nofollow, noarchive"/);
+    assert.match(html, noindexDirective);
+    assert.doesNotMatch(html, indexDirective);
   }
   const xml = readFileSync(new URL('../dist/sitemap.xml', import.meta.url), 'utf8');
-  assert.equal((xml.match(/<loc>/g) ?? []).length, 34);
-  assert.doesNotMatch(xml, /blog|discover|lastmod/);
-  for (const c of ['loan', 'tax', 'labor', 'life']) readFileSync(new URL(`../dist/categories/${c}/index.html`, import.meta.url));
-  for (const p of ['about', 'methodology']) readFileSync(new URL(`../dist/${p}/index.html`, import.meta.url));
-  assert.match(readFileSync(new URL('../dist/robots.txt', import.meta.url), 'utf8'), /Disallow: \//);
-  assert.match(readFileSync(new URL('../dist/_headers', import.meta.url), 'utf8'), /X-Robots-Tag: noindex/);
-  readFileSync(new URL('../dist/404.html', import.meta.url));
+  assert.equal((xml.match(/<loc>/g) ?? []).length, 3);
+  for (const path of ['https://calczen.online/', 'https://calczen.online/about', 'https://calczen.online/methodology']) {
+    assert.ok(xml.includes(`<loc>${path}</loc>`), `Missing sitemap URL: ${path}`);
+  }
+  assert.doesNotMatch(xml, /\/calc\/|\/categories\/|blog|discover|lastmod/);
+  for (const c of ['loan', 'tax', 'labor', 'life']) {
+    const categoryHtml = readFileSync(new URL(`../dist/categories/${c}/index.html`, import.meta.url), 'utf8');
+    assert.match(categoryHtml, noindexDirective);
+    assert.doesNotMatch(categoryHtml, indexDirective);
+  }
+  for (const p of ['about', 'methodology']) {
+    const policyHtml = readFileSync(new URL(`../dist/${p}/index.html`, import.meta.url), 'utf8');
+    assert.match(policyHtml, indexDirective);
+    assert.doesNotMatch(policyHtml, noindexDirective);
+  }
+  const robots = readFileSync(new URL('../dist/robots.txt', import.meta.url), 'utf8');
+  assert.match(robots, /Allow: \//);
+  assert.doesNotMatch(robots, /Disallow:/);
+  assert.match(robots, /Sitemap: https:\/\/calczen\.online\/sitemap\.xml/);
+  const headers = readFileSync(new URL('../dist/_headers', import.meta.url), 'utf8');
+  assert.doesNotMatch(headers, /^\/\*\r?\n  X-Robots-Tag:/m);
+  for (const route of ['/calc/*', '/categories/*', '/blog/*', '/discover.html', '/404.html', '/llms.txt', '/llms-full.txt']) {
+    assert.ok(headers.includes(`${route}\n  X-Robots-Tag: noindex, nofollow, noarchive`) || headers.includes(`${route}\r\n  X-Robots-Tag: noindex, nofollow, noarchive`), `Missing scoped X-Robots-Tag: ${route}`);
+  }
+  const notFound = readFileSync(new URL('../dist/404.html', import.meta.url), 'utf8');
+  assert.match(notFound, noindexDirective);
+  assert.doesNotMatch(notFound, indexDirective);
   const llms = readFileSync(new URL('../dist/llms-full.txt', import.meta.url), 'utf8');
+  assert.match(llms, /Search indexing is intentionally limited/);
   for (const c of CALCULATORS) assert.ok(llms.includes(`/calc/${c.slug}`));
-  console.log('Built route checks passed: 27 stations, 27 calculators, 4 categories, 2 policy pages, 34 sitemap URLs, three-layer noindex.');
+  console.log('Built indexing checks passed: only 3 canonical pages indexable; 27 calculators, 4 categories, 7 legacy pages, 404 and llms routes remain noindex.');
 }
 
 // Legacy public HTML is served directly: audit it separately from Astro layouts.

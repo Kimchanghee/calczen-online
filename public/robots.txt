@@ -1,6 +1,6 @@
-# Restoration QA: keep the entire site out of search indexes until launch approval.
+# Crawling is allowed so search engines can see the route-level indexing directives.
 User-agent: *
-Disallow: /
+Allow: /
 
 Sitemap: https://calczen.online/sitemap.xml
 Host: calczen.online
