@@ -162,7 +162,7 @@ export function calcLoanMonthly(
   let balance = principal;
   let totalInterest = 0;
   if (type === 'equal-payment') {
-    const monthly = (principal * r) / (1 - Math.pow(1 + r, -months));
+    const monthly = r === 0 ? principal / months : (principal * r) / (1 - Math.pow(1 + r, -months));
     for (let m = 1; m <= months; m++) {
       const interest = balance * r;
       const p = monthly - interest;
@@ -195,7 +195,7 @@ export function calcLoanMonthly(
 }
 
 export function calcSeverance(monthlyAvg: number, daysWorked: number): number {
-  return (monthlyAvg * 30 * daysWorked) / 365;
+  return (monthlyAvg * daysWorked) / 365;
 }
 
 export function calcBMI(weightKg: number, heightCm: number): { bmi: number; category: string } {

@@ -8,25 +8,16 @@
     "dev": "astro dev",
     "build": "astro build",
     "preview": "astro preview",
-    "type-check": "astro check",
-    "fetch-rates": "tsx scripts/fetch-rates.ts",
-    "cdk": "cdk --app 'tsx infrastructure/cdk-app.ts'",
-    "deploy": "npm run fetch-rates && npm run build && npm run cdk -- deploy --require-approval never"
+    "type-check": "tsc --noEmit",
+    "test:smoke": "tsx scripts/smoke-test.ts"
   },
   "dependencies": {
-    "astro": "^5.0.0",
-    "@astrojs/tailwind": "^5.1.2",
-    "@astrojs/sitemap": "^3.2.1",
-    "tailwindcss": "^3.4.13",
-    "lucide-react": "^0.452.0"
+    "astro": "^5.0.0"
   },
   "devDependencies": {
     "@types/node": "^22.7.5",
     "typescript": "^5.6.3",
-    "tsx": "^4.19.1",
-    "aws-cdk": "^2.160.0",
-    "aws-cdk-lib": "^2.160.0",
-    "constructs": "^10.4.2"
+    "tsx": "^4.19.1"
   },
   "engines": {
     "node": ">=20.0.0"

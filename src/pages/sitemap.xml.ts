@@ -6,7 +6,7 @@ const SITE = 'https://calczen.online';
 export const GET: APIRoute = () => {
   const lastmod = new Date().toISOString().slice(0, 10);
   const entries = [
-    { loc: SITE, priority: 1.0, changefreq: 'daily' },
+    { loc: `${SITE}/`, priority: 1.0, changefreq: 'daily' },
     ...CALCULATORS.map((c) => ({
       loc: `${SITE}/calc/${c.slug}`,
       priority: 0.9,
@@ -16,6 +16,20 @@ export const GET: APIRoute = () => {
       loc: `${SITE}/categories/${cat}`,
       priority: 0.7,
       changefreq: 'weekly' as const,
+    })),
+    ...[
+      '/about/',
+      '/blog/',
+      '/blog/2026-salary-calculator-guide/',
+      '/blog/bmi-calculator-asia-standard/',
+      '/blog/loan-calculator-explained/',
+      '/blog/retirement-savings-2026/',
+      '/blog/severance-pay-2026/',
+      '/discover.html',
+    ].map((path) => ({
+      loc: `${SITE}${path}`,
+      priority: 0.6,
+      changefreq: 'monthly' as const,
     })),
   ];
 

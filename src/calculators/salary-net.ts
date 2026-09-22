@@ -67,7 +67,9 @@ export function mountSalaryNet(root: HTMLElement) {
     const health = monthly * HEALTH_RATE;
     const longterm = health * LONGTERM_RATE;
     const employment = monthly * EMPLOYMENT_RATE;
-    const incTax = incomeTax(monthlyMil);
+    const dependents = Math.max(1, Number(depsEl.value) || 1);
+    const dependentAdjustment = Math.max(0, dependents - 1) * 12_500;
+    const incTax = Math.max(0, incomeTax(monthlyMil) - dependentAdjustment);
     const localTax = incTax * 0.1;
 
     const totalDeduction = pension + health + longterm + employment + incTax + localTax;
@@ -83,7 +85,7 @@ export function mountSalaryNet(root: HTMLElement) {
       ['건강보험 (3.545%)', -health],
       ['장기요양보험 (건보 × 12.95%)', -longterm],
       ['고용보험 (0.9%)', -employment],
-      ['소득세 (간이세액 추정)', -incTax],
+      [`소득세 (부양가족 ${dependents}인 간이 추정)`, -incTax],
       ['지방소득세 (소득세 × 10%)', -localTax],
       ['= 실수령액', netMonthly],
     ];

@@ -1,53 +1,6 @@
+# Restoration QA: keep the entire site out of search indexes until launch approval.
 User-agent: *
-Allow: /
-Disallow: /api/
-
-# AEO/GEO — AI 크롤러 명시 허용
-User-agent: GPTBot
-Allow: /
-
-User-agent: ChatGPT-User
-Allow: /
-
-User-agent: OAI-SearchBot
-Allow: /
-
-User-agent: ClaudeBot
-Allow: /
-
-User-agent: Claude-Web
-Allow: /
-
-User-agent: anthropic-ai
-Allow: /
-
-User-agent: PerplexityBot
-Allow: /
-
-User-agent: Perplexity-User
-Allow: /
-
-User-agent: Google-Extended
-Allow: /
-
-User-agent: Bytespider
-Allow: /
-
-User-agent: CCBot
-Allow: /
-
-User-agent: meta-externalagent
-Allow: /
-
-User-agent: Applebot-Extended
-Allow: /
-
-User-agent: Claude-SearchBot
-Allow: /
-
-User-agent: Amazonbot
-Allow: /
+Disallow: /
 
 Sitemap: https://calczen.online/sitemap.xml
 Host: calczen.online
-IndexNow-Key: 31e4aad991b0373c98c0f19991ceb8f2
