@@ -1,55 +1,46 @@
 ---
 import Layout from '../layouts/Layout.astro';
-import AffiliateBanner from '../components/AffiliateBanner.astro';
-import { CALCULATORS, CATEGORY_LABEL, getCalcsByCategory, type CalcCategory } from '../lib/calculators.ts';
-
-const cats: CalcCategory[] = ['loan', 'tax', 'labor', 'life'];
-
-const amazonPicks = [
-  { asin: '1612680194', title: 'Rich Dad Poor Dad', subtitle: 'Robert Kiyosaki · 부의 마인드셋', emoji: '💰' },
-  { asin: '1494279673', title: 'The Total Money Makeover', subtitle: 'Dave Ramsey · 가계 부채 정리', emoji: '📊' },
-  { searchQuery: 'financial calculator hp', title: 'Financial Calculator HP', subtitle: '금융 전문 공학용 계산기', emoji: '🧮' }
-];
+import { CALCULATORS, CATEGORY_LABEL, type CalcCategory } from '../lib/calculators';
+import '../styles/routes.css';
+const categories = Object.keys(CATEGORY_LABEL) as CalcCategory[];
+const selected = CALCULATORS[1];
 ---
-
-<Layout
-  title="CalcZen — 한국형 계산기 27종 모음 (대출·세금·연봉·퇴직금)"
-  description="LTV·DSR 한도, 종합소득세, 양도세, 연봉 실수령액, 퇴직금, 실업급여 등 한국형 계산기 27종을 무료로. 회원가입 없이 바로 사용."
-  keywords={['계산기', '대출 계산기', '세금 계산기', '연봉 계산기', '퇴직금 계산기']}
->
-
-<main class="min-h-screen">
-  <section class="bg-gradient-to-br from-emerald-50 to-white py-12">
-    <div class="container mx-auto max-w-5xl px-4 text-center">
-      <h1 class="text-4xl md:text-5xl font-bold tracking-tight">한국형 계산기, 한곳에</h1>
-      <p class="mt-4 text-lg text-slate-600">대출·세금·노동·일상 27종. 모두 무료. 모두 브라우저에서.</p>
-    </div>
-  </section>
-
-  {cats.map((cat) => (
-    <section class="container mx-auto max-w-5xl px-4 py-8">
-      <h2 class="mb-4 text-2xl font-semibold">{CATEGORY_LABEL[cat]}</h2>
-      <div class="grid grid-cols-1 gap-3 md:grid-cols-2 lg:grid-cols-3">
-        {getCalcsByCategory(cat).map((calc) => (
-          <a
-            href={`/calc/${calc.slug}`}
-            class="rounded-xl border bg-white p-5 transition hover:border-emerald-400 hover:shadow-md"
-          >
-            <h3 class="font-semibold text-slate-900">{calc.name}</h3>
-            <p class="mt-1 text-sm text-slate-600 line-clamp-2">{calc.description}</p>
-          </a>
-        ))}
-      </div>
-    </section>
-  ))}
-
-  <div class="container mx-auto max-w-5xl px-4">
-    <AffiliateBanner
-      amazonPicks={amazonPicks}
-      coupangKeyword="재테크 베스트셀러 가계부"
-      amazonKeyword="financial calculator"
-      aliexpressCategory="office-calculator"
-    />
-  </div>
-</main>
+<Layout title="CalcZen · 일상의 계산 노선도" description="금융·세금·노동·일상 계산 도구를 한 정거장씩. 민간 참고용 계산기이며 실제 적용 조건은 별도로 확인하세요." routeMap>
+<main class="route-shell" id="main">
+<section class="route-hero"><div><p class="eyebrow">SEOUL INSPIRED / 일상의 계산 노선도</p><h1>뭘 계산해볼까요?</h1><p class="hero-sub">복잡한 숫자에서, 가벼운 답으로. {CALCULATORS.length}개의 작은 도구.</p></div><span class="poster-mark" aria-hidden="true">숫자에도<br/>지름길이<br/>있다 ↗</span></section>
+<div class="search-wrap">
+<label class="tool-search" hidden><span aria-hidden="true">⌕</span><input id="tool-search" type="search" placeholder="어떤 계산이 필요하세요?" aria-label="계산기 이름·설명 검색" autocomplete="off"/><b id="tool-count">{CALCULATORS.length}</b></label>
+<noscript><p class="nojs-search">이름 검색은 브라우저의 ‘페이지에서 찾기’를 이용하세요. 모든 정거장 링크는 그대로 사용할 수 있습니다.</p></noscript>
+<nav class="route-jumps" aria-label="계산기 분류 바로 찾기">{categories.map((cat, i) => <a href={'#line-' + cat}><b>{String(i + 1).padStart(2, '0')}</b> {CATEGORY_LABEL[cat]}</a>)}</nav><p id="search-status" class="sr-only" role="status" aria-live="polite"></p></div>
+<div class="route-content"><section class="station-map" aria-label="계산기 노선도">
+<div class="map-heading"><strong>원하는 정거장으로 바로 이동 ↘</strong><span>{categories.length}개 노선 · {CALCULATORS.length}개 도구</span></div>
+{categories.map((cat, i) => <section class={'route-line line-' + cat} id={'line-' + cat}>
+<header class="line-heading"><span class="line-number">{String(i + 1).padStart(2, '0')}</span><h2><a href={'/categories/' + cat}>{CATEGORY_LABEL[cat]}</a></h2><small>{CALCULATORS.filter(c => c.category === cat).length}개 정거장</small></header>
+<ul class="station-list">{CALCULATORS.filter(c => c.category === cat).map(calc => <li data-search={[calc.name, calc.description, CATEGORY_LABEL[cat], ...calc.keywords].join(' ').toLowerCase()}><a class="station-link" href={'/calc/' + calc.slug} data-name={calc.name} data-description={calc.description} data-category={CATEGORY_LABEL[cat]}><i aria-hidden="true"></i><span><small>{String(CALCULATORS.indexOf(calc) + 1).padStart(2, '0')}</small><strong>{calc.name.replace(' 계산기', '').replace(' 변환기', '')}</strong></span></a></li>)}</ul></section>)}
+<p id="empty-search" hidden>맞는 정거장이 없어요. ‘대출’, ‘연봉’, ‘나이’로 다시 찾아보세요.</p><p class="map-key">○ 계산 도구 · 번호와 색은 분류 안내입니다. 실제 교통 노선이 아닙니다.</p></section>
+<aside class="tool-preview" aria-label="계산기 안내"><p class="preview-tag">정거장 안내 / 참고용</p><p id="preview-category">{CATEGORY_LABEL[selected.category]}</p><h2 id="preview-name">{selected.name}</h2><p id="preview-description">{selected.description}</p><a id="preview-link" href={'/calc/' + selected.slug}>계산기 열기 ↗</a><p class="preview-note">입력과 계산은 각 계산기 페이지에서 진행합니다. 결과는 추정치이며 금융·세무·의료 판단을 대신하지 않습니다.</p><a class="method-link" href="/methodology">계산 기준과 한계 확인 →</a></aside></div></main>
+<script>
+const input = document.querySelector<HTMLInputElement>('#tool-search');
+const stations = [...document.querySelectorAll<HTMLLIElement>('.station-list li')];
+const lines = [...document.querySelectorAll<HTMLElement>('.route-line')];
+if (input) {
+input.closest<HTMLElement>('.tool-search')!.hidden = false;
+input.addEventListener('input', () => {
+const query = input.value.trim().toLowerCase(); let count = 0;
+stations.forEach(station => { station.hidden = !station.dataset.search?.includes(query); if (!station.hidden) count++; });
+lines.forEach(line => { line.hidden = !line.querySelector('li:not([hidden])'); });
+document.querySelector('#tool-count')!.textContent = String(count);
+document.querySelector('#search-status')!.textContent = count + '개 계산기를 찾았습니다';
+document.querySelector<HTMLElement>('#empty-search')!.hidden = count > 0;
+});
+}
+document.querySelectorAll<HTMLAnchorElement>('.station-link').forEach(link => {
+const preview = () => {
+document.querySelector('#preview-name')!.textContent = link.dataset.name!;
+document.querySelector('#preview-description')!.textContent = link.dataset.description!;
+document.querySelector('#preview-category')!.textContent = link.dataset.category!;
+document.querySelector<HTMLAnchorElement>('#preview-link')!.href = link.href;
+}; link.addEventListener('focus', preview); link.addEventListener('mouseenter', preview);
+});
+</script>
 </Layout>

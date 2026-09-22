@@ -57,7 +57,7 @@ const guide = categoryGuide[calc.category] ?? categoryGuide.life;
   <p class="mt-2 text-slate-600">{calc.description}</p>
 
   <div id="calc-mount" data-slug={calc.slug} class="rounded-xl border bg-white p-6">
-    <div class="text-center text-slate-500 py-12">계산기 로딩 중...</div>
+    <p class="text-center text-slate-500 py-12">계산 도구를 불러오는 중입니다. 입력·계산에는 JavaScript가 필요합니다.</p><noscript><p>JavaScript가 꺼져 있습니다. 설명과 계산 기준은 읽을 수 있지만 계산하려면 JavaScript를 켜세요.</p></noscript>
   </div>
 
   <section class="mt-8 rounded-xl border bg-white p-6">
@@ -70,20 +70,7 @@ const guide = categoryGuide[calc.category] ?? categoryGuide.life;
           {guide.fields.map((field) => <li>- {field}</li>)}
         </ul>
       </div>
-      <form class="rounded-lg bg-emerald-50 p-4" onsubmit="return false">
-        <h3 class="font-semibold text-emerald-900">빠른 체크 입력칸</h3>
-        <label class="mt-3 block text-sm text-emerald-950">
-          기준 금액
-          <input name="amount" inputmode="decimal" placeholder="예: 10000000" class="mt-1 w-full rounded border border-emerald-200 bg-white px-3 py-2 text-sm" />
-        </label>
-        <label class="mt-3 block text-sm text-emerald-950">
-          기간 또는 비율
-          <input name="rate" inputmode="decimal" placeholder="예: 12개월 또는 4.5%" class="mt-1 w-full rounded border border-emerald-200 bg-white px-3 py-2 text-sm" />
-        </label>
-        <button type="submit" class="mt-4 rounded bg-emerald-600 px-4 py-2 text-sm font-semibold text-white">
-          입력값 정리하기
-        </button>
-      </form>
+      <p class="text-sm">입력은 위 계산기에서 진행하세요. <a href="/methodology">계산 기준과 한계</a>를 먼저 확인할 수 있습니다.</p>
     </div>
     <div class="mt-5 rounded-lg bg-slate-50 p-4">
       <h3 class="font-semibold text-slate-900">결과 해석 주의사항</h3>

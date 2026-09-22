@@ -1,49 +1,6 @@
 import type { APIRoute } from 'astro';
-import { CALCULATORS } from '../lib/calculators';
-
-const SITE = 'https://calczen.online';
-
+import { CALCULATORS, CATEGORY_LABEL } from '../lib/calculators';
 export const GET: APIRoute = () => {
-  const lastmod = new Date().toISOString().slice(0, 10);
-  const entries = [
-    { loc: `${SITE}/`, priority: 1.0, changefreq: 'daily' },
-    ...CALCULATORS.map((c) => ({
-      loc: `${SITE}/calc/${c.slug}`,
-      priority: 0.9,
-      changefreq: 'weekly' as const,
-    })),
-    ...['loan', 'tax', 'labor', 'life'].map((cat) => ({
-      loc: `${SITE}/categories/${cat}`,
-      priority: 0.7,
-      changefreq: 'weekly' as const,
-    })),
-    ...[
-      '/about/',
-      '/blog/',
-      '/blog/2026-salary-calculator-guide/',
-      '/blog/bmi-calculator-asia-standard/',
-      '/blog/loan-calculator-explained/',
-      '/blog/retirement-savings-2026/',
-      '/blog/severance-pay-2026/',
-      '/discover.html',
-    ].map((path) => ({
-      loc: `${SITE}${path}`,
-      priority: 0.6,
-      changefreq: 'monthly' as const,
-    })),
-  ];
-
-  const xml = `<?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-${entries.map((e) => `  <url>
-    <loc>${e.loc}</loc>
-    <lastmod>${lastmod}</lastmod>
-    <changefreq>${e.changefreq}</changefreq>
-    <priority>${e.priority}</priority>
-  </url>`).join('\n')}
-</urlset>`;
-
-  return new Response(xml, {
-    headers: { 'Content-Type': 'application/xml' },
-  });
+  const paths = ['/', ...CALCULATORS.map(c => `/calc/${c.slug}`), ...Object.keys(CATEGORY_LABEL).map(c => `/categories/${c}`), '/about', '/methodology'];
+  return new Response(`<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${paths.map(p => `  <url><loc>https://calczen.online${p}</loc></url>`).join('\n')}\n</urlset>`, { headers: { 'Content-Type': 'application/xml' } });
 };
