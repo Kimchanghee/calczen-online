@@ -26,6 +26,7 @@ export function mountLoanMonthly(root: HTMLElement) {
         <button data-type="equal-principal" class="lm-type rounded-lg bg-slate-200 px-4 py-2">원금 균등</button>
         <button data-type="bullet" class="lm-type rounded-lg bg-slate-200 px-4 py-2">만기 일시</button>
       </div>
+      <p id="lm-error" role="alert" class="rounded-lg bg-red-50 p-4 text-sm text-red-700" hidden></p>
       <div id="lm-result" class="rounded-xl border bg-emerald-50 p-5 text-center">
         <div class="text-sm text-emerald-700">월 상환액</div>
         <div id="lm-monthly" class="mt-1 text-3xl font-bold text-emerald-900">-</div>
@@ -42,7 +43,8 @@ export function mountLoanMonthly(root: HTMLElement) {
       </div>
       <details class="rounded-lg border bg-white">
         <summary class="cursor-pointer p-4 font-medium">상환 스케줄 (전체 보기)</summary>
-        <div id="lm-schedule" class="max-h-96 overflow-auto p-4 text-xs"></div>
+        <p class="px-4 text-xs text-slate-500">표가 잘리면 좌우로 스크롤하세요.</p>
+        <div id="lm-schedule" tabindex="0" role="region" aria-label="월별 상환 스케줄" class="max-h-96 overflow-auto p-4 text-xs"></div>
       </details>
     </div>
   `;
@@ -58,7 +60,16 @@ export function mountLoanMonthly(root: HTMLElement) {
     const p = Number(principal.value) || 0;
     const r = Number(rate.value) || 0;
     const m = Number(months.value) || 0;
-    if (p <= 0 || m <= 0) return;
+    const invalid = !principal.value || !rate.value || !months.value || !Number.isFinite(p) || !Number.isFinite(r) || !Number.isFinite(m) || p <= 0 || r < 0 || m <= 0 || !Number.isInteger(m);
+    const error = root.querySelector<HTMLElement>('#lm-error')!;
+    error.hidden = !invalid;
+    root.querySelector<HTMLElement>('#lm-result')!.hidden = invalid;
+    root.querySelector<HTMLElement>('details')!.hidden = invalid;
+    if (invalid) {
+      error.textContent = '원금은 0보다 크게, 금리는 0 이상으로, 기간은 1개월 이상의 정수로 입력하세요.';
+      root.querySelector('#lm-schedule')!.innerHTML = '';
+      return;
+    }
     const result = calcLoanMonthly(p, r, m, type);
     root.querySelector('#lm-monthly')!.textContent = fmt(result.monthly);
     root.querySelector('#lm-interest')!.textContent = fmt(result.totalInterest);

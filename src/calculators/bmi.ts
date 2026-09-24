@@ -40,7 +40,8 @@ export function mountBMI(root: HTMLElement) {
         </label>
       </div>
 
-      <div class="rounded-xl border bg-emerald-50 p-5 text-center">
+      <p id="bmi-error" role="alert" class="rounded-lg bg-red-50 p-4 text-sm text-red-700" hidden></p>
+      <div data-bmi-result class="rounded-xl border bg-emerald-50 p-5 text-center">
         <div class="text-sm text-emerald-700">BMI</div>
         <div id="bmi-value" class="mt-1 text-4xl font-bold text-emerald-900">-</div>
         <div id="bmi-cat" class="mt-1 text-sm font-medium"></div>
@@ -61,7 +62,7 @@ export function mountBMI(root: HTMLElement) {
         </div>
       </div>
 
-      <div class="rounded-lg border bg-rose-50 p-4">
+      <div data-bmi-result class="rounded-lg border bg-rose-50 p-4">
         <h3 class="mb-2 font-semibold text-rose-900">목표별 권장 칼로리</h3>
         <div id="bmi-goals" class="grid gap-1.5 text-sm"></div>
       </div>
@@ -90,7 +91,14 @@ export function mountBMI(root: HTMLElement) {
   const recompute = () => {
     const wt = Number(w.value) || 0;
     const ht = Number(h.value) || 0;
-    if (wt <= 0 || ht <= 0) return;
+    const invalid = !h.value || !w.value || !age.value || !Number.isFinite(wt) || !Number.isFinite(ht) || wt <= 0 || ht <= 0 || Number(age.value) <= 0;
+    const error = root.querySelector<HTMLElement>('#bmi-error')!;
+    error.hidden = !invalid;
+    root.querySelectorAll<HTMLElement>('[data-bmi-result]').forEach(el => { el.hidden = invalid; });
+    if (invalid) {
+      error.textContent = '신장, 체중, 나이를 0보다 큰 숫자로 입력하세요.';
+      return;
+    }
     const { bmi, category } = calcBMI(wt, ht);
     root.querySelector('#bmi-value')!.textContent = String(bmi);
     const catEl = root.querySelector('#bmi-cat')!;
