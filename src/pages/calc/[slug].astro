@@ -1,6 +1,6 @@
 ---
 import Layout from '../../layouts/Layout.astro';
-import { CALCULATORS, getCalcsByCategory } from '../../lib/calculators.ts';
+import { CALCULATORS, CATEGORY_LABEL, getCalcsByCategory } from '../../lib/calculators.ts';
 
 export async function getStaticPaths() {
   return CALCULATORS.map((c) => ({ params: { slug: c.slug }, props: { calc: c } }));
@@ -47,10 +47,10 @@ const guide = categoryGuide[calc.category] ?? categoryGuide.life;
 >
 
 <main class="container mx-auto max-w-3xl px-4 py-8">
-  <nav class="mb-4 text-sm text-slate-500">
+  <nav aria-label="현재 위치" class="mb-4 text-sm text-slate-500">
     <a href="/" class="hover:text-emerald-600">홈</a>
-    <span class="mx-2">/</span>
-    <a href={`/categories/${calc.category}`} class="hover:text-emerald-600">{calc.category}</a>
+    <span class="mx-2" aria-hidden="true">/</span>
+    <a href={`/categories/${calc.category}`} class="hover:text-emerald-600">{CATEGORY_LABEL[calc.category]}</a>
   </nav>
 
   <h1 class="text-3xl font-bold tracking-tight">{calc.name}</h1>
