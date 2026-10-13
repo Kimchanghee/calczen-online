@@ -1,0 +1,317 @@
+{
+  "domain": "calczen.online",
+  "applied_on": "2026-10-13",
+  "skill": {
+    "repo": "https://github.com/leopard627/fire-your-seo-agency",
+    "commit": "5f7249f",
+    "vendored_at": ".agents/skills/fire-your-seo-agency"
+  },
+  "before": {
+    "lanes": {
+      "SEO": "WARN",
+      "AEO": "WARN",
+      "GEO": "WARN",
+      "LLMO": "OK",
+      "NEO": "FAIL"
+    },
+    "crawler_view_home": {
+      "bodyChars": 1085,
+      "title": "CalcZen · 일상의 계산 노선도",
+      "jsonLd": [
+        "Organization",
+        "WebSite"
+      ],
+      "aiBotsExplicit": [],
+      "sitemapUrls": 3
+    }
+  },
+  "after": {
+    "lanes": {
+      "SEO": "WARN",
+      "AEO": "OK",
+      "GEO": "OK",
+      "LLMO": "OK",
+      "NEO": "WARN"
+    },
+    "note": "real astro build output (dist) served locally; SEO lane WARN is only the English-tuned audit length thresholds (Korean titles 18-37 chars, descriptions 55-125 chars are full-width Hangul); live re-audit needed after deploy",
+    "site": {
+      "robots": true,
+      "robotsSitemapRef": true,
+      "robotsDisallowAll": false,
+      "aiBotsExplicit": [
+        "GPTBot",
+        "OAI-SearchBot",
+        "ChatGPT-User",
+        "ClaudeBot",
+        "Claude-SearchBot",
+        "Claude-User",
+        "PerplexityBot",
+        "Perplexity-User",
+        "Google-Extended",
+        "Yeti",
+        "Bingbot"
+      ],
+      "sitemap": true,
+      "sitemapUrls": 38,
+      "llmsTxt": true,
+      "llmsLinks": 38,
+      "missingPageStatus": 404
+    },
+    "pages": {
+      "/": {
+        "status": 200,
+        "xRobotsTag": "",
+        "robotsMeta": "index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1",
+        "noindex": false,
+        "title": "CalcZen · 대출·세금·연봉·퇴직금 한국형 계산기 27종 모음",
+        "titleLen": 37,
+        "descLen": 94,
+        "desc": "금융·세금·노동·일상 분야 한국형 계산기 27종을 한곳에서. 대출 월상환액, 연봉 실수령액, 퇴직금, 양도세 등을 브라우저에서 바로 계산하고 계산식과 한계를 확인하세요.",
+        "canonical": "https://calczen.online/",
+        "og": true,
+        "h1": 1,
+        "bodyChars": 1367,
+        "ld": [
+          "Organization",
+          "WebSite",
+          "FAQPage"
+        ],
+        "faq": {
+          "total": 3,
+          "visible": 3
+        },
+        "hreflang": 3,
+        "naverVerify": false,
+        "bingVerify": false,
+        "gscVerify": false,
+        "trustLinks": [
+          "about",
+          "contact",
+          "privacy",
+          "terms"
+        ]
+      },
+      "/calc/loan-monthly-payment/": {
+        "status": 200,
+        "xRobotsTag": "",
+        "robotsMeta": "index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1",
+        "noindex": false,
+        "title": "대출 월상환액 계산기 · 계산식과 예시 | CalcZen",
+        "titleLen": 31,
+        "descLen": 95,
+        "desc": "대출 원금·연 이자율·상환 기간으로 원리금균등·원금균등·만기일시 방식별 월 상환액과 총이자를 계산합니다. 기본 입력 예시, 계산식, 반영되지 않는 조건을 함께 확인하세요.",
+        "canonical": "https://calczen.online/calc/loan-monthly-payment",
+        "og": true,
+        "h1": 1,
+        "bodyChars": 1733,
+        "ld": [
+          "Organization",
+          "WebSite",
+          "FAQPage",
+          "BreadcrumbList",
+          "WebApplication"
+        ],
+        "faq": {
+          "total": 3,
+          "visible": 3
+        },
+        "hreflang": 3,
+        "naverVerify": false,
+        "bingVerify": false,
+        "gscVerify": false,
+        "trustLinks": [
+          "about",
+          "contact",
+          "privacy",
+          "terms"
+        ]
+      },
+      "/categories/loan/": {
+        "status": 200,
+        "xRobotsTag": "",
+        "robotsMeta": "index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1",
+        "noindex": false,
+        "title": "금융·대출 계산기 6종 모음 | CalcZen",
+        "titleLen": 25,
+        "descLen": 125,
+        "desc": "금융·대출 분야 한국형 계산기 6종(주택담보대출 LTV·DSR 한도, 대출 월상환액, 적금 vs 예금 수익 비교, 복리, 자동차 할부, 학자금 대출 상환)을 모았습니다. 브라우저에서 바로 계산하고 계산식과 한계를 확인하세요.",
+        "canonical": "https://calczen.online/categories/loan",
+        "og": true,
+        "h1": 1,
+        "bodyChars": 1357,
+        "ld": [
+          "Organization",
+          "WebSite",
+          "FAQPage",
+          "BreadcrumbList",
+          "CollectionPage"
+        ],
+        "faq": {
+          "total": 2,
+          "visible": 2
+        },
+        "hreflang": 3,
+        "naverVerify": false,
+        "bingVerify": false,
+        "gscVerify": false,
+        "trustLinks": [
+          "about",
+          "contact",
+          "privacy",
+          "terms"
+        ]
+      },
+      "/about/": {
+        "status": 200,
+        "xRobotsTag": "",
+        "robotsMeta": "index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1",
+        "noindex": false,
+        "title": "CalcZen 소개 · 운영 범위와 검증 한계, 데이터 처리 안내",
+        "titleLen": 36,
+        "descLen": 85,
+        "desc": "CalcZen은 금융·세금·노동·일상 분야 한국형 계산기를 제공하는 민간 참고 도구입니다. 운영 범위, 검증 한계, 입력 데이터 처리 방식을 안내합니다.",
+        "canonical": "https://calczen.online/about",
+        "og": true,
+        "h1": 1,
+        "bodyChars": 989,
+        "ld": [
+          "Organization",
+          "WebSite"
+        ],
+        "faq": null,
+        "hreflang": 3,
+        "naverVerify": false,
+        "bingVerify": false,
+        "gscVerify": false,
+        "trustLinks": [
+          "about",
+          "contact",
+          "privacy",
+          "terms"
+        ]
+      },
+      "/privacy/": {
+        "status": 200,
+        "xRobotsTag": "",
+        "robotsMeta": "index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1",
+        "noindex": false,
+        "title": "개인정보처리방침 · CalcZen 입력값과 로그 안내",
+        "titleLen": 29,
+        "descLen": 69,
+        "desc": "CalcZen 계산기의 입력값 처리, 호스팅 접속 로그, 외부 링크와 제휴 링크 이용 시 적용되는 개인정보 관련 안내입니다.",
+        "canonical": "https://calczen.online/privacy",
+        "og": true,
+        "h1": 1,
+        "bodyChars": 1020,
+        "ld": [
+          "Organization",
+          "WebSite"
+        ],
+        "faq": null,
+        "hreflang": 3,
+        "naverVerify": false,
+        "bingVerify": false,
+        "gscVerify": false,
+        "trustLinks": [
+          "about",
+          "contact",
+          "privacy",
+          "terms"
+        ]
+      },
+      "/terms/": {
+        "status": 200,
+        "xRobotsTag": "",
+        "robotsMeta": "index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1",
+        "noindex": false,
+        "title": "이용약관 · CalcZen 계산기 이용 조건",
+        "titleLen": 24,
+        "descLen": 55,
+        "desc": "CalcZen 계산기 이용 조건, 결과의 성격, 외부 링크, 서비스 변경과 중단에 관한 안내입니다.",
+        "canonical": "https://calczen.online/terms",
+        "og": true,
+        "h1": 1,
+        "bodyChars": 997,
+        "ld": [
+          "Organization",
+          "WebSite"
+        ],
+        "faq": null,
+        "hreflang": 3,
+        "naverVerify": false,
+        "bingVerify": false,
+        "gscVerify": false,
+        "trustLinks": [
+          "about",
+          "contact",
+          "privacy",
+          "terms"
+        ]
+      },
+      "/contact/": {
+        "status": 200,
+        "xRobotsTag": "",
+        "robotsMeta": "index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1",
+        "noindex": false,
+        "title": "문의 · CalcZen 연락 안내",
+        "titleLen": 18,
+        "descLen": 71,
+        "desc": "CalcZen에 오류나 보안 취약점을 알리려는 경우의 공개 연락처 안내입니다. 계산 결과에 대한 개별 상담은 제공하지 않습니다.",
+        "canonical": "https://calczen.online/contact",
+        "og": true,
+        "h1": 1,
+        "bodyChars": 604,
+        "ld": [
+          "Organization",
+          "WebSite"
+        ],
+        "faq": null,
+        "hreflang": 3,
+        "naverVerify": false,
+        "bingVerify": false,
+        "gscVerify": false,
+        "trustLinks": [
+          "about",
+          "contact",
+          "privacy",
+          "terms"
+        ]
+      }
+    }
+  },
+  "changed": [
+    "27 calculator pages and 4 category pages made indexable (previously noindex by header and meta); legacy 7 pages and 404 stay noindex",
+    "per-calculator direct answer, worked example computed from the real calculator module defaults, formula list, limits, official check links, visible FAQ, WebApplication+BreadcrumbList JSON-LD",
+    "FAQPage JSON-LD text equals visible FAQ text on every page",
+    "new privacy, terms, disclaimer, contact pages (contact uses only security@calczen.online already published in security.txt)",
+    "Organization @id unified to /#organization",
+    "home title/description rewritten; unique titles/descriptions across all 38 indexable pages",
+    "sitemap 38 URLs with lastmod; llms.txt and llms-full.txt regenerated; robots.txt AI crawler policy + Yeti + Bingbot",
+    "computeSalaryNet/computeSeverance extracted as pure functions to feed examples; smoke test updated and passing (27 calculators)"
+  ],
+  "not_done": [
+    {
+      "item": "Organization sameAs",
+      "reason": "no verified official profile URLs"
+    },
+    {
+      "item": "OG image",
+      "reason": "no image asset"
+    },
+    {
+      "item": "Naver/Bing verification tags",
+      "reason": "tokens only issued inside the accounts"
+    }
+  ],
+  "user_action_required": [
+    "Upload ~/seo-tools/releases/calczen.online.zip to Cloudflare and re-audit live",
+    "Register Naver Search Advisor, Bing Webmaster, GSC, submit sitemap"
+  ],
+  "remeasure_on": "2026-10-27",
+  "measure_plan": [
+    "GSC impressions/clicks 28d",
+    "Naver Search Advisor",
+    "AI citation Q&A 5-10 queries",
+    "AI crawler visits"
+  ]
+}
