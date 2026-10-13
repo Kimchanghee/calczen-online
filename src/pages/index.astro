@@ -4,8 +4,13 @@ import { CALCULATORS, CATEGORY_LABEL, type CalcCategory } from '../lib/calculato
 import '../styles/routes.css';
 const categories = Object.keys(CATEGORY_LABEL) as CalcCategory[];
 const selected = CALCULATORS[1];
+const faqs = [
+  { question: 'CalcZen은 무엇인가요?', answer: `금융·세금·노동·일상 분야의 한국형 계산기 ${CALCULATORS.length}종을 모은 민간 참고 도구입니다. 정부·공공기관과 무관합니다.` },
+  { question: '입력한 값은 서버로 전송되나요?', answer: '계산은 브라우저에서 실행되며 계산 모듈은 입력값을 서버로 전송하거나 저장하지 않도록 구현되어 있습니다. 호스팅 서버의 접속 로그와 외부 링크 정책은 별개입니다.' },
+  { question: '계산 결과는 얼마나 정확한가요?', answer: '입력값과 구현된 산식에 따른 참고용 추정치입니다. 법령 개정, 개별 공제·감면, 계약 조건은 자동 반영되지 않으므로 실제 적용 전에 공식 기관의 최신 안내를 확인해야 합니다.' },
+];
 ---
-<Layout title="CalcZen · 일상의 계산 노선도" description="금융·세금·노동·일상 계산 도구를 한 정거장씩. 민간 참고용 계산기이며 실제 적용 조건은 별도로 확인하세요." routeMap indexable>
+<Layout title="CalcZen · 대출·세금·연봉·퇴직금 한국형 계산기 27종 모음" description="금융·세금·노동·일상 분야 한국형 계산기 27종을 한곳에서. 대출 월상환액, 연봉 실수령액, 퇴직금, 양도세 등을 브라우저에서 바로 계산하고 계산식과 한계를 확인하세요." routeMap indexable faqs={faqs}>
 <main class="route-shell" id="main">
 <section class="route-hero"><div><p class="eyebrow">SEOUL INSPIRED / 일상의 계산 노선도</p><h1>뭘 계산해볼까요?</h1><p class="hero-sub">복잡한 숫자에서, 가벼운 답으로. {CALCULATORS.length}개의 작은 도구.</p></div><span class="poster-mark" aria-hidden="true">숫자에도<br/>지름길이<br/>있다 ↗</span></section>
 <div class="search-wrap">

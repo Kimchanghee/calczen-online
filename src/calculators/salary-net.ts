@@ -25,6 +25,23 @@ function incomeTax(monthlyTaxableMillion: number): number {
   return (m * 0.18 - 1.10) * 1_000_000;
 }
 
+export function computeSalaryNet(annual: number, dependentsInput: number) {
+  const monthly = annual / 12;
+  const monthlyMil = monthly / 1_000_000;
+  const pensionBase = Math.min(monthly, PENSION_MAX_BASE);
+  const pension = pensionBase * PENSION_RATE;
+  const health = monthly * HEALTH_RATE;
+  const longterm = health * LONGTERM_RATE;
+  const employment = monthly * EMPLOYMENT_RATE;
+  const dependents = Math.max(1, dependentsInput || 1);
+  const dependentAdjustment = Math.max(0, dependents - 1) * 12_500;
+  const incTax = Math.max(0, incomeTax(monthlyMil) - dependentAdjustment);
+  const localTax = incTax * 0.1;
+  const totalDeduction = pension + health + longterm + employment + incTax + localTax;
+  const netMonthly = monthly - totalDeduction;
+  return { monthly, pension, health, longterm, employment, incTax, localTax, dependents, totalDeduction, netMonthly, netAnnual: netMonthly * 12 };
+}
+
 export function mountSalaryNet(root: HTMLElement) {
   root.innerHTML = `
     <div class="grid gap-5">
@@ -58,23 +75,7 @@ export function mountSalaryNet(root: HTMLElement) {
   const depsEl = root.querySelector<HTMLInputElement>('#sn-deps')!;
 
   const recompute = () => {
-    const annual = Number(annualEl.value) || 0;
-    const monthly = annual / 12;
-    const monthlyMil = monthly / 1_000_000;
-
-    const pensionBase = Math.min(monthly, PENSION_MAX_BASE);
-    const pension = pensionBase * PENSION_RATE;
-    const health = monthly * HEALTH_RATE;
-    const longterm = health * LONGTERM_RATE;
-    const employment = monthly * EMPLOYMENT_RATE;
-    const dependents = Math.max(1, Number(depsEl.value) || 1);
-    const dependentAdjustment = Math.max(0, dependents - 1) * 12_500;
-    const incTax = Math.max(0, incomeTax(monthlyMil) - dependentAdjustment);
-    const localTax = incTax * 0.1;
-
-    const totalDeduction = pension + health + longterm + employment + incTax + localTax;
-    const netMonthly = monthly - totalDeduction;
-    const netAnnual = netMonthly * 12;
+    const { monthly, pension, health, longterm, employment, incTax, localTax, dependents, netMonthly, netAnnual } = computeSalaryNet(Number(annualEl.value) || 0, Number(depsEl.value) || 1);
 
     root.querySelector('#sn-net-monthly')!.textContent = fmt(netMonthly);
     root.querySelector('#sn-net-annual')!.textContent = fmt(netAnnual);

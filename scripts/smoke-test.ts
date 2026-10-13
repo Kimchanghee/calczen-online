@@ -88,21 +88,25 @@ if (process.argv.includes('--dist')) {
     assert.ok(home.includes(`href="/calc/${c.slug}"`), `Missing station: ${c.slug}`);
     const html = readFileSync(new URL(`../dist/calc/${c.slug}/index.html`, import.meta.url), 'utf8');
     assert.ok(html.includes(`data-slug="${c.slug}"`));
-    assert.match(html, noindexDirective);
-    assert.doesNotMatch(html, indexDirective);
+    assert.match(html, indexDirective);
+    assert.doesNotMatch(html, noindexDirective);
+    assert.match(html, /결론부터:/);
+    assert.match(html, /"@type":"FAQPage"/);
+    assert.match(html, /"@type":"WebApplication"/);
+    assert.match(html, /계산 방법/);
   }
   const xml = readFileSync(new URL('../dist/sitemap.xml', import.meta.url), 'utf8');
-  assert.equal((xml.match(/<loc>/g) ?? []).length, 3);
-  for (const path of ['https://calczen.online/', 'https://calczen.online/about', 'https://calczen.online/methodology']) {
-    assert.ok(xml.includes(`<loc>${path}</loc>`), `Missing sitemap URL: ${path}`);
+  assert.equal((xml.match(/<loc>/g) ?? []).length, 3 + 4 + 4 + 27);
+  for (const path of ['/', '/about', '/methodology', '/privacy', '/terms', '/disclaimer', '/contact']) {
+    assert.ok(xml.includes(`<loc>https://calczen.online${path}</loc>`), `Missing sitemap URL: ${path}`);
   }
-  assert.doesNotMatch(xml, /\/calc\/|\/categories\/|blog|discover|lastmod/);
+  assert.doesNotMatch(xml, /blog|discover/);
   for (const c of ['loan', 'tax', 'labor', 'life']) {
     const categoryHtml = readFileSync(new URL(`../dist/categories/${c}/index.html`, import.meta.url), 'utf8');
-    assert.match(categoryHtml, noindexDirective);
-    assert.doesNotMatch(categoryHtml, indexDirective);
+    assert.match(categoryHtml, indexDirective);
+    assert.doesNotMatch(categoryHtml, noindexDirective);
   }
-  for (const p of ['about', 'methodology']) {
+  for (const p of ['about', 'methodology', 'privacy', 'terms', 'disclaimer', 'contact']) {
     const policyHtml = readFileSync(new URL(`../dist/${p}/index.html`, import.meta.url), 'utf8');
     assert.match(policyHtml, indexDirective);
     assert.doesNotMatch(policyHtml, noindexDirective);
@@ -111,18 +115,20 @@ if (process.argv.includes('--dist')) {
   assert.match(robots, /Allow: \//);
   assert.doesNotMatch(robots, /Disallow:/);
   assert.match(robots, /Sitemap: https:\/\/calczen\.online\/sitemap\.xml/);
+  for (const bot of ['GPTBot', 'OAI-SearchBot', 'ClaudeBot', 'PerplexityBot', 'Yeti']) assert.match(robots, new RegExp('User-agent: ' + bot));
   const headers = readFileSync(new URL('../dist/_headers', import.meta.url), 'utf8');
   assert.doesNotMatch(headers, /^\/\*\r?\n  X-Robots-Tag:/m);
-  for (const route of ['/calc/*', '/categories/*', '/blog/*', '/discover.html', '/404.html', '/llms.txt', '/llms-full.txt']) {
+  for (const route of ['/blog/*', '/discover.html', '/404.html']) {
     assert.ok(headers.includes(`${route}\n  X-Robots-Tag: noindex, nofollow, noarchive`) || headers.includes(`${route}\r\n  X-Robots-Tag: noindex, nofollow, noarchive`), `Missing scoped X-Robots-Tag: ${route}`);
   }
+  for (const route of ['/calc/*', '/categories/*', '/llms.txt', '/llms-full.txt']) assert.ok(!headers.includes(route + '\n'), `Unexpected header rule: ${route}`);
   const notFound = readFileSync(new URL('../dist/404.html', import.meta.url), 'utf8');
   assert.match(notFound, noindexDirective);
   assert.doesNotMatch(notFound, indexDirective);
   const llms = readFileSync(new URL('../dist/llms-full.txt', import.meta.url), 'utf8');
-  assert.match(llms, /Search indexing is intentionally limited/);
+  assert.match(llms, /## 데이터 정책/);
   for (const c of CALCULATORS) assert.ok(llms.includes(`/calc/${c.slug}`));
-  console.log('Built indexing checks passed: only 3 canonical pages indexable; 27 calculators, 4 categories, 7 legacy pages, 404 and llms routes remain noindex.');
+  console.log('Built indexing checks passed: home, 4 categories, 27 calculators and 6 policy pages indexable; legacy 7 pages and 404 remain noindex.');
 }
 
 // Legacy public HTML is served directly: audit it separately from Astro layouts.

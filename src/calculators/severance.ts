@@ -9,6 +9,16 @@
 
 import { calcSeverance } from '../lib/calculators';
 
+export function computeSeverance(startDate: string, endDate: string, last3Months: [number, number, number], annualBonus: number) {
+  const days = Math.floor((new Date(endDate).getTime() - new Date(startDate).getTime()) / (1000 * 60 * 60 * 24));
+  if (days < 365) return { eligible: false as const, days };
+  const total3m = last3Months.reduce((sum, v) => sum + (v || 0), 0);
+  const bonusPortion = (annualBonus || 0) * (3 / 12);
+  const avgDaily = (total3m + bonusPortion) / 92;
+  const avgMonthly = avgDaily * 30;
+  return { eligible: true as const, days, avgDaily, avgMonthly, severance: calcSeverance(avgMonthly, days), years: days / 365 };
+}
+
 export function mountSeverance(root: HTMLElement) {
   root.innerHTML = `
     <div class="grid gap-5">

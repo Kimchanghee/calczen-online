@@ -356,6 +356,12 @@ export function calculateGeneral(slug: string, values: Record<string, string>): 
   return definition.calculate(values);
 }
 
+export function getGeneralFields(slug: string): Field[] {
+  const definition = definitions[slug];
+  if (!definition) throw new Error(`지원하지 않는 계산기: ${slug}`);
+  return definition.fields;
+}
+
 export function getGeneralCalculatorSlugs(): string[] {
   return Object.keys(definitions);
 }

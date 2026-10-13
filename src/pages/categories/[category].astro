@@ -2,6 +2,7 @@
 import Layout from '../../layouts/Layout.astro';
 import AffiliateBanner from '../../components/AffiliateBanner.astro';
 import { CATEGORY_LABEL, getCalcsByCategory, type CalcCategory } from '../../lib/calculators.ts';
+import { CONTENT_UPDATED } from '../../lib/calc-content.ts';
 
 export function getStaticPaths() {
   const categories = Object.keys(CATEGORY_LABEL) as CalcCategory[];
@@ -11,6 +12,12 @@ export function getStaticPaths() {
 const category = Astro.params.category as CalcCategory;
 const label = CATEGORY_LABEL[category];
 const calculators = getCalcsByCategory(category);
+const nameList = calculators.map((c) => c.name.replace(' 계산기', '')).join(', ');
+const categoryDescription = `${label} 분야 한국형 계산기 ${calculators.length}종(${nameList})을 모았습니다. 브라우저에서 바로 계산하고 계산식과 한계를 확인하세요.`;
+const faqs = [
+  { question: `${label} 계산기에는 어떤 도구가 있나요?`, answer: calculators.map((c) => c.name).join(', ') + '이(가) 있습니다.' },
+  { question: '입력한 값은 서버로 전송되나요?', answer: '계산은 브라우저에서 실행되며 계산 모듈은 입력값을 서버로 전송하거나 저장하지 않도록 구현되어 있습니다. 호스팅 서버의 접속 로그와 외부 링크 이용 시 해당 서비스의 정책은 별개입니다.' },
+];
 
 const amazonPicks = [
   { searchQuery: `${label} calculator`, title: `${label} 계산 보조 도구`, subtitle: '계산·재무 관리에 도움이 되는 추천 도구', emoji: '🧮' },
@@ -20,21 +27,33 @@ const amazonPicks = [
 ---
 
 <Layout
-  title={`${label} 계산기 모음 — CalcZen`}
-  description={`${label} 분야의 한국형 계산기를 한곳에서 확인하세요. 회원가입 없이 무료로 바로 계산할 수 있습니다.`}
+  title={`${label} 계산기 ${calculators.length}종 모음 | CalcZen`}
+  description={categoryDescription}
   canonicalPath={`/categories/${category}`}
   keywords={[`${label} 계산기`, '한국형 계산기', '무료 계산기']}
+  indexable
+  faqs={faqs}
   breadcrumbs={[
     { name: '홈', url: 'https://calczen.online/' },
     { name: label, url: `https://calczen.online/categories/${category}` },
   ]}
+  ldJson={{
+    '@type': 'CollectionPage',
+    '@id': `https://calczen.online/categories/${category}#collection`,
+    name: `${label} 계산기 모음`,
+    url: `https://calczen.online/categories/${category}`,
+    inLanguage: 'ko-KR',
+    isPartOf: { '@id': 'https://calczen.online/#website' },
+    dateModified: CONTENT_UPDATED,
+    mainEntity: { '@type': 'ItemList', itemListElement: calculators.map((c, i) => ({ '@type': 'ListItem', position: i + 1, name: c.name, url: `https://calczen.online/calc/${c.slug}` })) },
+  }}
 >
 
 <main class="container mx-auto max-w-5xl px-4 py-8">
   <section class="mb-8">
     <h1 class="text-3xl font-bold tracking-tight">{label} 계산기</h1>
     <p class="mt-2 text-slate-600">
-      자주 쓰는 {label} 계산기를 빠르게 열 수 있도록 모았습니다. 각 계산기는 브라우저에서 바로 실행됩니다.
+      {label} 분야 계산기 {calculators.length}종입니다. 각 계산기 페이지에서 기본 입력 예시, 계산식, 반영되지 않는 조건을 확인할 수 있으며 계산은 브라우저에서 바로 실행됩니다.
     </p>
   </section>
 
